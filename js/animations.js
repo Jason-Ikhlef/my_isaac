@@ -1,21 +1,33 @@
 export function createAnimations(scene) {
     scene.anims.create({
-        key: "left",
-        frames: scene.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+        key: 'body_left',
+        frames: scene.anims.generateFrameNames('body', { frames: ['body_0020', 'body_0019', 'body_0018', 'body_0017', 'body_0016', 'body_0015', 'body_0014', 'body_0013', 'body_0012', 'body_0011', 'body_0010'] }),
         frameRate: 10,
         repeat: -1,
+        yoyo: true,
     });
 
     scene.anims.create({
-        key: "turn",
-        frames: [{ key: "dude", frame: 4 }],
-        frameRate: 20,
+        key: 'body_right',
+        frames: scene.anims.generateFrameNames('body', { prefix: 'body_', start: 1, end: 10, zeroPad: 4 }),
+        frameRate: 10,
+        repeat: -1,
+        yoyo: true,
     });
 
     scene.anims.create({
-        key: "right",
-        frames: scene.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+        key: 'body_down',
+        frames: scene.anims.generateFrameNames('body', { prefix: 'body_', start: 21, end: 30, zeroPad: 4 }),
         frameRate: 10,
         repeat: -1,
+        yoyo: true,
+    });
+
+    scene.anims.create({
+        key: 'body_up',
+        frames: scene.anims.generateFrameNames('body', { prefix: 'body_', start: 21, end: 30, zeroPad: 4 }),
+        frameRate: 10,
+        repeat: -1,
+        yoyo: true,
     });
 }

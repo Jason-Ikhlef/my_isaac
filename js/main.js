@@ -1,4 +1,8 @@
-import { config } from "./config.js";
+import { config } from './config.js';
+import GameScene from '../js/scenes/GameScene.js'
 
-// Création de l'instance du jeu avec la configuration
-const game = new Phaser.Game(config);
+config.scene = [GameScene];
+
+window.addEventListener('load', () => {
+    new Phaser.Game(config);
+});

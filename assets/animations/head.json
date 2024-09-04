@@ -1,0 +1,188 @@
+{
+	"textures": [
+		{
+			"image": "head.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 224,
+				"h": 25
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "isaac_13",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					}
+				},
+				{
+					"filename": "isaac_14",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					},
+					"frame": {
+						"x": 28,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					}
+				},
+				{
+					"filename": "isaac_15",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					},
+					"frame": {
+						"x": 56,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					}
+				},
+				{
+					"filename": "isaac_16",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					},
+					"frame": {
+						"x": 84,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					}
+				},
+				{
+					"filename": "isaac_17",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					},
+					"frame": {
+						"x": 112,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					}
+				},
+				{
+					"filename": "isaac_18",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					},
+					"frame": {
+						"x": 140,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					}
+				},
+				{
+					"filename": "isaac_19",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					},
+					"frame": {
+						"x": 168,
+						"y": 0,
+						"w": 28,
+						"h": 25
+					}
+				},
+				{
+					"filename": "isaac_20",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 28,
+						"h": 24
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					},
+					"frame": {
+						"x": 196,
+						"y": 0,
+						"w": 28,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:6708c18ef2f10f414e59dfb4de20b3e8:93e3fcfbc9b8b9c53643ace8a1580fee:a998be81c57d22105f7bfe53ff146225$"
+	}
+}
