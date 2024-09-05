@@ -39,10 +39,13 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('spikes', 'assets/floors/spikes.png');
         this.load.atlas('head', 'assets/characters/head.png', 'assets/animations/head.json');
         this.load.atlas('body', 'assets/characters/body.png', 'assets/animations/body.json');
-        this.load.audio('isaac_hurt', ['sounds/sfx/isaac_hurt.wav']);
-        this.load.audio('basement_music', ['sounds/musics/dipteraSonata.ogg']);
+        this.load.audio('isaac_hurt', 'sounds/sfx/isaac_hurt.wav');
+        this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
         this.load.image('tears', 'assets/characters/tears.png');
         this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
+        this.load.audio('tears_block', 'sounds/sfx/tear_block.wav')
+
+        console.log(this)
     }
 
     create() {
@@ -77,7 +80,7 @@ export default class GameScene extends Phaser.Scene {
             }
         }, null, this); 
 
-        const basement_music = this.sound.add('basement_music');
+        const basement_music = this.sound.add('basement_music', {volume: 0.5});
         basement_music.loop = true;
         basement_music.play();
     }

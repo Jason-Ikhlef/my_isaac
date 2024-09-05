@@ -33,6 +33,8 @@ export default class Player {
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyQ = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+        console.log(scene)
     }
 
     initHearts() {
@@ -162,6 +164,14 @@ export default class Player {
         let tear = this.scene.physics.add.sprite(this.player.x, this.player.y, 'tears');
         tear.setScale(0.7);
 
+        tear.setCollideWorldBounds(true);
+        tear.body.onWorldBounds = true;
+
+        this.scene.physics.add.collider(tear, this.scene.borderTop, this.handleTearCollision.bind(this), null, this.scene);
+        this.scene.physics.add.collider(tear, this.scene.borderBottom, this.handleTearCollision.bind(this), null, this.scene);
+        this.scene.physics.add.collider(tear, this.scene.borderLeft, this.handleTearCollision.bind(this), null, this.scene);
+        this.scene.physics.add.collider(tear, this.scene.borderRight, this.handleTearCollision.bind(this), null, this.scene);        
+
         switch (direction) {
             case 'left':
                 tear.setVelocityX(-tearSpeed);
@@ -176,5 +186,10 @@ export default class Player {
                 tear.setVelocityY(tearSpeed);
                 break;
         }
+    }
+
+    handleTearCollision(tear) {
+        this.scene.sound.play('tears_block');
+        tear.destroy();
     }
 }
