@@ -19,12 +19,14 @@ export default class Player {
 
         this.hearts = [];
         this.maxHearts = 3;
-        this.currentHealth = 6;
+        this.health = 6;
         this.isInvincible = false;
         this.invincibilityDuration = 1000;
         this.attackSpeed = 400;
         this.lastShotTime = 0;
         this.lastDirection = 'down';
+        this.damage = 3;
+        this.knockback = 50;
 
         this.initHearts();
 
@@ -33,8 +35,6 @@ export default class Player {
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyQ = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-
-        console.log(scene)
     }
 
     initHearts() {
@@ -48,16 +48,16 @@ export default class Player {
         }
     }
 
-    changeHealth(dmg, sound) {
-        sound.play();
-        this.currentHealth += dmg;
-        this.currentHealth = Phaser.Math.Clamp(this.currentHealth, 0, this.maxHearts * 2);
+    changeHealth(dmg) {
+        this.scene.sound.play('isaac_hurt')
+        this.health += dmg;
+        this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
         this.updateHearts();
     }
 
     updateHearts() {
         for (let i = 0; i < this.maxHearts; i++) {
-            let heartValue = this.currentHealth - (i * 2);
+            let heartValue = this.health - (i * 2);
 
             if (heartValue >= 2) {
                 this.hearts[i].setFrame(0);
@@ -163,14 +163,20 @@ export default class Player {
         let tearSpeed = 300;
         let tear = this.scene.physics.add.sprite(this.player.x, this.player.y, 'tears');
         tear.setScale(0.7);
-
-        tear.setCollideWorldBounds(true);
-        tear.body.onWorldBounds = true;
+        tear.damage = this.damage;
+        tear.knockback = this.knockback;
 
         this.scene.physics.add.collider(tear, this.scene.borderTop, this.handleTearCollision.bind(this), null, this.scene);
         this.scene.physics.add.collider(tear, this.scene.borderBottom, this.handleTearCollision.bind(this), null, this.scene);
         this.scene.physics.add.collider(tear, this.scene.borderLeft, this.handleTearCollision.bind(this), null, this.scene);
-        this.scene.physics.add.collider(tear, this.scene.borderRight, this.handleTearCollision.bind(this), null, this.scene);        
+        this.scene.physics.add.collider(tear, this.scene.borderRight, this.handleTearCollision.bind(this), null, this.scene);
+
+        this.scene.physics.add.overlap(tear, this.scene.enemiesGroup, (tear, enemy) => {
+            let pooter = enemy.getData('instance');
+            pooter.takeDamage(tear);
+            tear.destroy();
+        }, null, this);
+        
 
         switch (direction) {
             case 'left':
@@ -185,7 +191,7 @@ export default class Player {
             case 'down':
                 tear.setVelocityY(tearSpeed);
                 break;
-        }
+        }      
     }
 
     handleTearCollision(tear) {

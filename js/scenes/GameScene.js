@@ -1,5 +1,6 @@
 import Player from "../player.js";
 import { createAnimations } from "../animations.js";
+import Pooter from '../pooter.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -11,7 +12,7 @@ export default class GameScene extends Phaser.Scene {
         this.keyD = null;
         this.lastDirection = 'down';
 
-        this.spikesGroup = null;
+        this.spikesGroup, this.enemiesGroup = null;
 
         this.spikePositions = [
             { x: 420, y: 150 },
@@ -44,8 +45,6 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('tears', 'assets/characters/tears.png');
         this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
         this.load.audio('tears_block', 'sounds/sfx/tear_block.wav')
-
-        console.log(this)
     }
 
     create() {
@@ -72,10 +71,9 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.collider(this.player.player, this.borderLeft);
         this.physics.add.collider(this.player.player, this.borderRight);
 
-        const isaac_hurt = this.sound.add('isaac_hurt');
         this.physics.add.overlap(this.player.player, this.spikesGroup, () => {
             if (!this.player.isInvincible) {
-                this.player.changeHealth(-1, isaac_hurt);
+                this.player.changeHealth(-1);
                 this.player.startInvincibility();
             }
         }, null, this); 
@@ -83,6 +81,10 @@ export default class GameScene extends Phaser.Scene {
         const basement_music = this.sound.add('basement_music', {volume: 0.5});
         basement_music.loop = true;
         basement_music.play();
+
+        this.enemiesGroup = this.physics.add.group();
+        let pooter = new Pooter(this, 500, 300);
+        this.enemiesGroup.add(pooter.sprite);
     }
 
     update() {

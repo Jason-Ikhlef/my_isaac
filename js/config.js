@@ -7,8 +7,8 @@ export const config = {
     scene: GameScene,
     physics: {
         default: "arcade",
+        arcade: {
+            debug: true,
+        }
     },
-    arcade: {
-        debug: true,
-    }
 };
