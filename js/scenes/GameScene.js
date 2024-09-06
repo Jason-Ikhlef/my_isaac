@@ -120,18 +120,22 @@ export default class GameScene extends Phaser.Scene {
     createBorders(worldWidth, worldHeight) {
         this.borderTop = this.add.rectangle(worldWidth / 2, 120, worldWidth, 10, 0x000000);
         this.physics.add.existing(this.borderTop, true);
+        this.borderTop.setAlpha(0);
         this.bordersGroup.add(this.borderTop);
     
         this.borderBottom = this.add.rectangle(worldWidth / 2, worldHeight - 150, worldWidth, 10, 0x000000);
         this.physics.add.existing(this.borderBottom, true);
+        this.borderTop.setAlpha(0);
         this.bordersGroup.add(this.borderBottom);
     
         this.borderLeft = this.add.rectangle(360, worldHeight / 2, 10, worldHeight, 0x000000);
         this.physics.add.existing(this.borderLeft, true);
+        this.borderTop.setAlpha(0);
         this.bordersGroup.add(this.borderLeft);
     
         this.borderRight = this.add.rectangle(worldWidth - 360, worldHeight / 2, 10, worldHeight, 0x000000);
         this.physics.add.existing(this.borderRight, true);
+        this.borderTop.setAlpha(0);
         this.bordersGroup.add(this.borderRight);
     }
     
