@@ -40,16 +40,14 @@ export default class Pooter extends Enemy {
             if (currentTime - this.lastShotTime >= this.attackSpeed) {
                 this.shootAtPlayer();
                 this.lastShotTime = currentTime;
-                console.log(this.scene);
                 this.scene.sound.play('pooter_tears');
             }
         }
     }
 
     shootAtPlayer() {
-        let tear = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'enemyTear');
-        tear.setScale(0.5);
-
+        let tear = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'blood_tears');
+        
         let angle = Phaser.Math.Angle.Between(
             this.sprite.x,
             this.sprite.y,

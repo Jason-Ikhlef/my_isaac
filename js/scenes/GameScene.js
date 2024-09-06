@@ -48,6 +48,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.audio('pooter_tears', 'sounds/sfx/pooter_tears.wav');
         this.load.audio('pooter_die', 'sounds/sfx/pooter_die.wav');
         this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
+        this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
     }
 
     create() {
@@ -64,7 +65,7 @@ export default class GameScene extends Phaser.Scene {
         this.createDoors();
         
         this.player = new Player(this);
-        
+
         this.physics.add.collider(this.player.player, this.bordersGroup);
         
         createAnimations(this);
