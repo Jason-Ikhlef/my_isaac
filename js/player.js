@@ -49,7 +49,9 @@ export default class Player {
     }
 
     changeHealth(dmg) {
-        this.scene.sound.play('isaac_hurt')
+        if (dmg > 0) {
+            this.scene.sound.play('isaac_hurt')
+        }
         this.health += dmg;
         this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
         this.updateHearts();
