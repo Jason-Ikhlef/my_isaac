@@ -44,7 +44,11 @@ export default class GameScene extends Phaser.Scene {
         this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
         this.load.image('tears', 'assets/characters/tears.png');
         this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
-        this.load.audio('tears_block', 'sounds/sfx/tear_block.wav')
+        this.load.audio('tears_block', 'sounds/sfx/tear_block.wav');
+        this.load.audio('pooter_tears', 'sounds/sfx/pooter_tears.wav');
+        this.load.audio('pooter_die', 'sounds/sfx/pooter_die.wav');
+        this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
+        this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
     }
 
     create() {
@@ -53,11 +57,16 @@ export default class GameScene extends Phaser.Scene {
 
         this.createQuarters(worldWidth, worldHeight);
 
+        this.bordersGroup = this.physics.add.staticGroup();
+        
         this.createBorders(worldWidth, worldHeight);
-
+    
+        
         this.createDoors();
-
+        
         this.player = new Player(this);
+
+        this.physics.add.collider(this.player.player, this.bordersGroup);
         
         createAnimations(this);
 
@@ -66,11 +75,6 @@ export default class GameScene extends Phaser.Scene {
         this.spikesGroup = this.physics.add.group({ immovable: true });
         this.createSpikes(this.spikePositions);
 
-        this.physics.add.collider(this.player.player, this.borderTop);
-        this.physics.add.collider(this.player.player, this.borderBottom);
-        this.physics.add.collider(this.player.player, this.borderLeft);
-        this.physics.add.collider(this.player.player, this.borderRight);
-
         this.physics.add.overlap(this.player.player, this.spikesGroup, () => {
             if (!this.player.isInvincible) {
                 this.player.changeHealth(-1);
@@ -78,9 +82,9 @@ export default class GameScene extends Phaser.Scene {
             }
         }, null, this); 
 
-        const basement_music = this.sound.add('basement_music', {volume: 0.5});
+        const basement_music = this.sound.add('basement_music');
         basement_music.loop = true;
-        basement_music.play();
+        basement_music.play({volume: 0.1});
 
         this.enemiesGroup = this.physics.add.group();
         let pooter = new Pooter(this, 500, 300);
@@ -114,18 +118,23 @@ export default class GameScene extends Phaser.Scene {
     }
 
     createBorders(worldWidth, worldHeight) {
-        this.borderTop = this.add.rectangle(worldWidth / 2, 120, worldWidth, 10, 0, 0x000000);
+        this.borderTop = this.add.rectangle(worldWidth / 2, 120, worldWidth, 10, 0x000000);
         this.physics.add.existing(this.borderTop, true);
-
-        this.borderBottom = this.add.rectangle(worldWidth / 2, worldHeight - 150, worldWidth, 10, 0, 0x000000);
+        this.bordersGroup.add(this.borderTop);
+    
+        this.borderBottom = this.add.rectangle(worldWidth / 2, worldHeight - 150, worldWidth, 10, 0x000000);
         this.physics.add.existing(this.borderBottom, true);
-
-        this.borderLeft = this.add.rectangle(360, worldHeight / 2, 10, worldHeight, 0, 0x000000);
+        this.bordersGroup.add(this.borderBottom);
+    
+        this.borderLeft = this.add.rectangle(360, worldHeight / 2, 10, worldHeight, 0x000000);
         this.physics.add.existing(this.borderLeft, true);
-
-        this.borderRight = this.add.rectangle(worldWidth - 360, worldHeight / 2, 10, worldHeight, 0, 0x000000);
+        this.bordersGroup.add(this.borderLeft);
+    
+        this.borderRight = this.add.rectangle(worldWidth - 360, worldHeight / 2, 10, worldHeight, 0x000000);
         this.physics.add.existing(this.borderRight, true);
+        this.bordersGroup.add(this.borderRight);
     }
+    
 
     createDoors() {
         this.add.sprite(window.innerWidth / 2 - 75, 60, "basementDoor")

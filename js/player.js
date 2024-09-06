@@ -48,10 +48,12 @@ export default class Player {
         }
     }
 
-    changeHealth(dmg) {
-        if (dmg > 0) {
+    changeHealth(dmg) {        
+        if (dmg < 0) {
             this.scene.sound.play('isaac_hurt')
-        }
+            this.startInvincibility();
+        };
+
         this.health += dmg;
         this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
         this.updateHearts();
@@ -168,10 +170,7 @@ export default class Player {
         tear.damage = this.damage;
         tear.knockback = this.knockback;
 
-        this.scene.physics.add.collider(tear, this.scene.borderTop, this.handleTearCollision.bind(this), null, this.scene);
-        this.scene.physics.add.collider(tear, this.scene.borderBottom, this.handleTearCollision.bind(this), null, this.scene);
-        this.scene.physics.add.collider(tear, this.scene.borderLeft, this.handleTearCollision.bind(this), null, this.scene);
-        this.scene.physics.add.collider(tear, this.scene.borderRight, this.handleTearCollision.bind(this), null, this.scene);
+        this.scene.physics.add.collider(tear, this.scene.bordersGroup, this.handleTearCollision.bind(this), null, this.scene);
 
         this.scene.physics.add.overlap(tear, this.scene.enemiesGroup, (tear, enemy) => {
             let pooter = enemy.getData('instance');

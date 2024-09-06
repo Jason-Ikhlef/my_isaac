@@ -40,14 +40,14 @@ export default class Pooter extends Enemy {
             if (currentTime - this.lastShotTime >= this.attackSpeed) {
                 this.shootAtPlayer();
                 this.lastShotTime = currentTime;
+                this.scene.sound.play('pooter_tears');
             }
         }
     }
 
     shootAtPlayer() {
-        let tear = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'enemyTear');
-        tear.setScale(0.5);
-
+        let tear = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'blood_tears');
+        
         let angle = Phaser.Math.Angle.Between(
             this.sprite.x,
             this.sprite.y,
@@ -58,17 +58,16 @@ export default class Pooter extends Enemy {
         let velocity = this.scene.physics.velocityFromRotation(angle, 200);
         tear.setVelocity(velocity.x, velocity.y);
 
-        tear.setCollideWorldBounds(true);
-        tear.body.onWorldBounds = true;
-        tear.body.world.on('worldbounds', (body) => {
-            if (body.gameObject === tear) {
-                tear.destroy();
-            }
-        });
+        this.scene.physics.add.collider(tear, this.scene.bordersGroup, this.handleTearCollision.bind(this), null, this.scene);
 
         this.scene.physics.add.overlap(tear, this.scene.player.player, () => {
             this.scene.player.changeHealth(-this.damage);
             tear.destroy();
         });
+    }
+
+    handleTearCollision(tear) {
+        this.scene.sound.play('tears_block');
+        tear.destroy();
     }
 }
