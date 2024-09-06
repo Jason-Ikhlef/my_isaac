@@ -1,6 +1,7 @@
 export default class Enemy {
     constructor(scene, x, y, texture, name) {
         this.scene = scene;
+        this.name = name;
         this.sprite = scene.physics.add.sprite(x, y, texture);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setSize(26, 26);
@@ -12,6 +13,16 @@ export default class Enemy {
 
         this.scene.events.on('update', this.update, this);
         this.sprite.setData('instance', this);
+
+        this.ambientSound = null;
+
+        this.initAmbianceSound();
+    }
+
+    initAmbianceSound() {
+        this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
+        this.ambientSound.loop = true;
+        this.ambientSound.play();
     }
 
     takeDamage(tear) {        
@@ -33,10 +44,15 @@ export default class Enemy {
     }
 
     die() {
+        this.scene.sound.play(`${this.name}_die`)
         this.scene.events.off('update', this.update, this);
         this.scene.physics.world.remove(this.sprite);
         this.sprite.destroy();
         this.isAlive = false;
+
+        if (this.ambientSound && this.ambientSound.isPlaying) {
+            this.ambientSound.stop();
+        }
     }
 
     handlePlayerCollision(enemy, player) {
