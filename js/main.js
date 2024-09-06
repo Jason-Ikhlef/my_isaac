@@ -1,7 +1,8 @@
 import { config } from './config.js';
-import GameScene from '../js/scenes/GameScene.js'
+import TitleScene from '../js/scenes/TitleScene.js';
+import GameScene from '../js/scenes/GameScene.js';
 
-config.scene = [GameScene];
+config.scene = [TitleScene, GameScene];
 
 window.addEventListener('load', () => {
     new Phaser.Game(config);
