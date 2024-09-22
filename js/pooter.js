@@ -2,17 +2,42 @@ import Enemy from "./enemy.js";
 
 export default class Pooter extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'pooter', 'pooter');
+        super(scene, x, y, 'pooter', 'pooter', false);
+
         this.health = 5;
         this.damage = 1;
-        this.attackSpeed = 1000;
-        this.lastShotTime = 0;
-        this.detectionRange = 300;
+
+        this.lastShotTime = this.scene.time.now;
+        this.attackSpeed = 2000;
         this.moveSpeed = 20;
+
+        this.detectionRange = 300;
+        this.knockbackResistance = 10;
 
         this.moveArea = new Phaser.Geom.Rectangle(x - 20, y - 20, 40, 40);
 
-        this.initMovement();
+        this.sprite.setSize(16, 18);
+        this.sprite.setOffset(0, 3);
+        this.sprite.setScale(1.6);
+        this.sprite.setDepth(2);
+
+        this.sprite.play('pooter_fly');
+
+        this.scene.time.delayedCall(1000, () => {
+            this.initMovement();
+        });
+
+        this.sprite.on('animationupdate', (animation, frame) => {
+            if (animation.key === 'pooter_shoot' && frame.index === 9) {
+                this.performShoot();
+            }
+        });
+
+        this.sprite.on('animationcomplete', function (anim) {
+            if (anim.key === 'pooter_shoot') {
+                this.sprite.play('pooter_fly');
+            }
+        }, this);
     }
 
     initMovement() {
@@ -40,13 +65,17 @@ export default class Pooter extends Enemy {
             if (currentTime - this.lastShotTime >= this.attackSpeed) {
                 this.shootAtPlayer();
                 this.lastShotTime = currentTime;
-                this.scene.sound.play('pooter_tears');
             }
         }
     }
 
     shootAtPlayer() {
-        let tear = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'blood_tears');
+        this.sprite.play('pooter_shoot');
+    }
+
+    performShoot() {
+        this.scene.sound.play('pooter_tears');
+        let tear = this.scene.physics.add.sprite(this.sprite.x, (this.sprite.y + 2), 'blood_tears');
         
         let angle = Phaser.Math.Angle.Between(
             this.sprite.x,

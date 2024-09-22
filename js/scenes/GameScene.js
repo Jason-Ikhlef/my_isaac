@@ -1,6 +1,7 @@
 import Player from "../player.js";
 import { createAnimations } from "../animations.js";
 import Pooter from '../pooter.js';
+import CrazyLongLegs from "../crazyLongLegs.js";
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -37,18 +38,26 @@ export default class GameScene extends Phaser.Scene {
             frameHeight: 16 
         });
 
-        this.load.image('spikes', 'assets/floors/spikes.png');
         this.load.atlas('head', 'assets/characters/head.png', 'assets/animations/head.json');
         this.load.atlas('body', 'assets/characters/body.png', 'assets/animations/body.json');
         this.load.audio('isaac_hurt', 'sounds/sfx/isaac_hurt.wav');
-        this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
         this.load.image('tears', 'assets/characters/tears.png');
         this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
         this.load.audio('tears_block', 'sounds/sfx/tear_block.wav');
+        
+        this.load.image('spikes', 'assets/floors/spikes.png');
+        this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
+
+        this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
+        
+        this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
         this.load.audio('pooter_tears', 'sounds/sfx/pooter_tears.wav');
         this.load.audio('pooter_die', 'sounds/sfx/pooter_die.wav');
-        this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
-        this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
+        this.load.atlas('pooter', 'assets/monsters/pooter.png', 'assets/animations/pooter.json');
+
+        this.load.audio('crazyLongLegs_tears', 'sounds/sfx/crazyLongLegs_tears.wav');
+        this.load.audio('crazyLongLegs_die', 'sounds/sfx/crazyLongLegs_die.wav');
+        this.load.atlas('crazyLongLegs', 'assets/monsters/crazyLongLegs.png', 'assets/animations/crazyLongLegs.json');
     }
 
     create() {
@@ -60,7 +69,6 @@ export default class GameScene extends Phaser.Scene {
         this.bordersGroup = this.physics.add.staticGroup();
         
         this.createBorders(worldWidth, worldHeight);
-    
         
         this.createDoors();
         
@@ -87,8 +95,13 @@ export default class GameScene extends Phaser.Scene {
         basement_music.play({volume: 0.1});
 
         this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 500, 300);
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+
+        let pooter = new Pooter(this, 800, 350);
         this.enemiesGroup.add(pooter.sprite);
+        
+        let crazyLongLegs = new CrazyLongLegs(this, 400, 350);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
     }
 
     update() {
@@ -120,18 +133,22 @@ export default class GameScene extends Phaser.Scene {
     createBorders(worldWidth, worldHeight) {
         this.borderTop = this.add.rectangle(worldWidth / 2, 120, worldWidth, 10, 0x000000);
         this.physics.add.existing(this.borderTop, true);
+        this.borderTop.setAlpha(0);
         this.bordersGroup.add(this.borderTop);
     
         this.borderBottom = this.add.rectangle(worldWidth / 2, worldHeight - 150, worldWidth, 10, 0x000000);
         this.physics.add.existing(this.borderBottom, true);
+        this.borderBottom.setAlpha(0);
         this.bordersGroup.add(this.borderBottom);
     
         this.borderLeft = this.add.rectangle(360, worldHeight / 2, 10, worldHeight, 0x000000);
         this.physics.add.existing(this.borderLeft, true);
+        this.borderLeft.setAlpha(0);
         this.bordersGroup.add(this.borderLeft);
     
         this.borderRight = this.add.rectangle(worldWidth - 360, worldHeight / 2, 10, worldHeight, 0x000000);
         this.physics.add.existing(this.borderRight, true);
+        this.borderRight.setAlpha(0);
         this.bordersGroup.add(this.borderRight);
     }
     
