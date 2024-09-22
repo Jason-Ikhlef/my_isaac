@@ -1,8 +1,8 @@
-import Enemy from './enemy.js';
+import Enemy from "./enemy.js";
 
 export default class CrazyLongLegs extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'crazyLongLegs', 'crazyLongLegs', true);
+        super(scene, x, y, "crazyLongLegs", "crazyLongLegs", true);
 
         this.health = 10;
         this.damage = 1;
@@ -24,20 +24,23 @@ export default class CrazyLongLegs extends Enemy {
             loop: true,
         });
 
-        this.sprite.play('crazyLongLegs_move');
+        this.sprite.play("crazyLongLegs_move");
 
-        this.sprite.on('animationupdate', (animation, frame) => {
-            if (animation.key === 'crazyLongLegs_shoot' && frame.index === 3) {
+        this.sprite.on("animationupdate", (animation, frame) => {
+            if (animation.key === "crazyLongLegs_shoot" && frame.index === 3) {
                 this.shootInAllDirections();
             }
         });
 
-        this.sprite.on('animationcomplete', function (anim) {
-            if (anim.key === 'crazyLongLegs_shoot') {
-                this.sprite.play('crazyLongLegs_move');
-            }
-        }, this);
-
+        this.sprite.on(
+            "animationcomplete",
+            function (anim) {
+                if (anim.key === "crazyLongLegs_shoot") {
+                    this.sprite.play("crazyLongLegs_move");
+                }
+            },
+            this
+        );
 
         this.generateRandomStats();
     }
@@ -60,63 +63,86 @@ export default class CrazyLongLegs extends Enemy {
 
         const currentTime = this.scene.time.now;
 
-        if (distanceToPlayer > this.attackRange || currentTime - this.lastShotTime < this.attackSpeed) {
-            if (this.sprite.anims.currentAnim?.key !== 'crazyLongLegs_move') {
-                this.sprite.play('crazyLongLegs_move');
+        if (
+            distanceToPlayer > this.attackRange ||
+            currentTime - this.lastShotTime < this.attackSpeed
+        ) {
+            if (this.sprite.anims.currentAnim?.key !== "crazyLongLegs_move") {
+                this.sprite.play("crazyLongLegs_move");
             }
-            this.scene.physics.moveToObject(this.sprite, player, this.moveSpeed);
+            this.scene.physics.moveToObject(
+                this.sprite,
+                player,
+                this.moveSpeed
+            );
         } else {
             this.stopAndAttack();
         }
-        
     }
 
     stopAndAttack() {
         if (!this.isAlive || this.isAttacking) return;
 
-        this.sprite.play('crazyLongLegs_shoot');
-    
+        this.sprite.play("crazyLongLegs_shoot");
+
         this.isAttacking = true;
         this.sprite.body.setVelocity(0, 0);
-        
+
         this.shootAtPlayer();
         this.lastShotTime = this.scene.time.now;
-    
+
         this.generateRandomStats();
-    
+
         this.scene.time.delayedCall(1000, () => {
             this.isAttacking = false;
         });
     }
 
     shootAtPlayer() {
-        this.sprite.play('crazyLongLegs_shoot');
+        this.sprite.play("crazyLongLegs_shoot");
     }
-    
+
     shootInAllDirections() {
-        this.scene.sound.play('crazyLongLegs_tears');
+        this.scene.sound.play("crazyLongLegs_tears");
 
         const numProjectiles = 8;
         const angleStep = (2 * Math.PI) / numProjectiles;
 
         for (let i = 0; i < numProjectiles; i++) {
             const angle = i * angleStep;
-            const velocity = this.scene.physics.velocityFromRotation(angle, 200);
+            const velocity = this.scene.physics.velocityFromRotation(
+                angle,
+                200
+            );
 
-            let tear = this.scene.physics.add.sprite(this.sprite.x, this.sprite.y, 'blood_tears');
+            let tear = this.scene.physics.add.sprite(
+                this.sprite.x,
+                this.sprite.y,
+                "blood_tears"
+            );
             tear.setVelocity(velocity.x, velocity.y);
 
-            this.scene.physics.add.collider(tear, this.scene.bordersGroup, this.handleTearCollision.bind(this), null, this.scene);
+            this.scene.physics.add.collider(
+                tear,
+                this.scene.bordersGroup,
+                this.handleTearCollision.bind(this),
+                null,
+                this.scene
+            );
 
-            this.scene.physics.add.overlap(tear, this.scene.player.player, () => {
-                this.scene.player.changeHealth(-this.damage);
-                tear.destroy();
-            });
+            this.scene.physics.add.overlap(
+                tear,
+                this.scene.player.player,
+                () => {
+                    this.scene.player.changeHealth(-this.damage);
+                    tear.destroy();
+                }
+            );
         }
     }
 
     handleTearCollision(tear) {
-        this.scene.sound.play('tears_block');
+        this.scene.sound.play("tears_block");
         tear.destroy();
     }
 }
