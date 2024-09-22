@@ -1,6 +1,7 @@
 import Player from "../player.js";
 import { createAnimations } from "../animations.js";
 import Pooter from '../pooter.js';
+import CrazyLongLegs from "../crazyLongLegs.js";
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -50,6 +51,7 @@ export default class GameScene extends Phaser.Scene {
         this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
         this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
         this.load.atlas('pooter', 'assets/monsters/pooter.png', 'assets/animations/pooter.json');
+        this.load.audio('crazyLongLegs_tears', 'sounds/sfx/crazyLongLegs_tears.wav');
     }
 
     create() {
@@ -87,8 +89,13 @@ export default class GameScene extends Phaser.Scene {
         basement_music.play({volume: 0.1});
 
         this.enemiesGroup = this.physics.add.group();
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+
         let pooter = new Pooter(this, 800, 350);
         this.enemiesGroup.add(pooter.sprite);
+        
+        let crazyLongLegs = new CrazyLongLegs(this, 300, 350);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
     }
 
     update() {

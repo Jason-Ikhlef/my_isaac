@@ -1,15 +1,17 @@
 export default class Enemy {
-    constructor(scene, x, y, texture, name) {
+    constructor(scene, x, y, texture, name, contactDmg) {
         this.scene = scene;
         this.name = name;
         this.sprite = scene.physics.add.sprite(x, y, texture);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setSize(26, 26);
-        this.health = 5;
         this.isAlive = true;
-        this.knockbackResistance = 10;
+        this.contactDmg = contactDmg;
+        this.knockbackResistance = 0;
+        this.lastCollisionTime = 0;
 
         scene.physics.add.collider(this.sprite, scene.player.player, this.handlePlayerCollision, null, this);
+        scene.physics.add.collider(this.sprite, scene.bordersGroup);
 
         this.scene.events.on('update', this.update, this);
         this.sprite.setData('instance', this);
@@ -20,9 +22,11 @@ export default class Enemy {
     }
 
     initAmbianceSound() {
-        this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
-        this.ambientSound.loop = true;
-        this.ambientSound.play();
+        if (this.scene.sound.get(`${this.name}_sound`)) {
+            this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
+            this.ambientSound.loop = true;
+            this.ambientSound.play();
+        }
     }
 
     takeDamage(tear) {        
@@ -56,10 +60,22 @@ export default class Enemy {
     }
 
     handlePlayerCollision(enemy, player) {
-        let overlapX = enemy.x - player.x;
-        let overlapY = enemy.y - player.y;
+        const currentTime = this.scene.time.now;
 
-        enemy.body.setVelocity(overlapX * 10, overlapY * 10);
+        if (currentTime - this.lastCollisionTime > 500) {
+            let overlapX = enemy.x - player.x;
+            let overlapY = enemy.y - player.y;
+
+            const knockbackForce = 5 / (this.knockbackResistance + 1);
+
+            enemy.body.setVelocity(overlapX * knockbackForce, overlapY * knockbackForce);
+
+            this.lastCollisionTime = currentTime;
+
+            if (this.contactDmg) {
+                this.scene.player.changeHealth(-this.damage);
+            }
+        }
     }
 
     update() {

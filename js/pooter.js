@@ -2,16 +2,22 @@ import Enemy from "./enemy.js";
 
 export default class Pooter extends Enemy {
     constructor(scene, x, y) {
-        super(scene, x, y, 'pooter', 'pooter');
+        super(scene, x, y, 'pooter', 'pooter', false);
+
         this.health = 5;
         this.damage = 1;
-        this.attackSpeed = 2000;
+
         this.lastShotTime = this.scene.time.now;
-        this.detectionRange = 300;
+        this.attackSpeed = 2000;
         this.moveSpeed = 20;
+
+        this.detectionRange = 300;
+        this.knockbackResistance = 10;
 
         this.moveArea = new Phaser.Geom.Rectangle(x - 20, y - 20, 40, 40);
 
+        this.sprite.setSize(16, 18);
+        this.sprite.setOffset(0, 3);
         this.sprite.setScale(1.6);
         this.sprite.setDepth(2);
 
