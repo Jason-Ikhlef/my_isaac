@@ -40,6 +40,12 @@ export default class Enemy {
         }
     
         this.sprite.body.setVelocity(-tearDirectionX * (tear.knockback - this.knockbackResistance), -tearDirectionY * (tear.knockback - this.knockbackResistance));
+        
+        this.sprite.setTintFill(0xff0000);
+
+        this.scene.time.delayedCall(100, () => {
+            this.sprite.clearTint();
+        });
 
         this.health -= tear.damage;
         if (this.health <= 0) {

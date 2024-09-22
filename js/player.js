@@ -76,10 +76,10 @@ export default class Player {
     startInvincibility() {
         this.isInvincible = true;
         this.player.setAlpha(0.5);
-        setTimeout(() => {
+        this.scene.time.delayedCall(this.invincibilityDuration, () => {
             this.isInvincible = false;
             this.player.setAlpha(1);
-        }, this.invincibilityDuration);
+        });
     }
 
     update() {

@@ -23,9 +23,9 @@ export default class Pooter extends Enemy {
 
         this.sprite.play('pooter_fly');
 
-        setTimeout(() => {
+        this.scene.time.delayedCall(1000, () => {
             this.initMovement();
-          }, 1000);
+        });
 
         this.sprite.on('animationupdate', (animation, frame) => {
             if (animation.key === 'pooter_shoot' && frame.index === 9) {
