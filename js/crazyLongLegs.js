@@ -24,6 +24,21 @@ export default class CrazyLongLegs extends Enemy {
             loop: true,
         });
 
+        this.sprite.play('crazyLongLegs_move');
+
+        this.sprite.on('animationupdate', (animation, frame) => {
+            if (animation.key === 'crazyLongLegs_shoot' && frame.index === 3) {
+                this.shootInAllDirections();
+            }
+        });
+
+        this.sprite.on('animationcomplete', function (anim) {
+            if (anim.key === 'crazyLongLegs_shoot') {
+                this.sprite.play('crazyLongLegs_move');
+            }
+        }, this);
+
+
         this.generateRandomStats();
     }
 
@@ -46,28 +61,38 @@ export default class CrazyLongLegs extends Enemy {
         const currentTime = this.scene.time.now;
 
         if (distanceToPlayer > this.attackRange || currentTime - this.lastShotTime < this.attackSpeed) {
+            if (this.sprite.anims.currentAnim?.key !== 'crazyLongLegs_move') {
+                this.sprite.play('crazyLongLegs_move');
+            }
             this.scene.physics.moveToObject(this.sprite, player, this.moveSpeed);
         } else {
             this.stopAndAttack();
         }
+        
     }
 
     stopAndAttack() {
         if (!this.isAlive || this.isAttacking) return;
 
+        this.sprite.play('crazyLongLegs_shoot');
+    
         this.isAttacking = true;
         this.sprite.body.setVelocity(0, 0);
-        this.shootInAllDirections();
-
+        
+        this.shootAtPlayer();
         this.lastShotTime = this.scene.time.now;
-
+    
         this.generateRandomStats();
-
+    
         this.scene.time.delayedCall(1000, () => {
             this.isAttacking = false;
         });
     }
 
+    shootAtPlayer() {
+        this.sprite.play('crazyLongLegs_shoot');
+    }
+    
     shootInAllDirections() {
         this.scene.sound.play('crazyLongLegs_tears');
 

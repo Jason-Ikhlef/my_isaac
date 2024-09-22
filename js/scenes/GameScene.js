@@ -38,20 +38,26 @@ export default class GameScene extends Phaser.Scene {
             frameHeight: 16 
         });
 
-        this.load.image('spikes', 'assets/floors/spikes.png');
         this.load.atlas('head', 'assets/characters/head.png', 'assets/animations/head.json');
         this.load.atlas('body', 'assets/characters/body.png', 'assets/animations/body.json');
         this.load.audio('isaac_hurt', 'sounds/sfx/isaac_hurt.wav');
-        this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
         this.load.image('tears', 'assets/characters/tears.png');
         this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
         this.load.audio('tears_block', 'sounds/sfx/tear_block.wav');
+        
+        this.load.image('spikes', 'assets/floors/spikes.png');
+        this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
+
+        this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
+        
+        this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
         this.load.audio('pooter_tears', 'sounds/sfx/pooter_tears.wav');
         this.load.audio('pooter_die', 'sounds/sfx/pooter_die.wav');
-        this.load.audio('pooter_sound', 'sounds/sfx/pooter_sound.wav');
-        this.load.image('blood_tears', 'assets/monsters/blood_tears.png')
         this.load.atlas('pooter', 'assets/monsters/pooter.png', 'assets/animations/pooter.json');
+
         this.load.audio('crazyLongLegs_tears', 'sounds/sfx/crazyLongLegs_tears.wav');
+        this.load.audio('crazyLongLegs_die', 'sounds/sfx/crazyLongLegs_die.wav');
+        this.load.atlas('crazyLongLegs', 'assets/monsters/crazyLongLegs.png', 'assets/animations/crazyLongLegs.json');
     }
 
     create() {
@@ -94,7 +100,7 @@ export default class GameScene extends Phaser.Scene {
         let pooter = new Pooter(this, 800, 350);
         this.enemiesGroup.add(pooter.sprite);
         
-        let crazyLongLegs = new CrazyLongLegs(this, 300, 350);
+        let crazyLongLegs = new CrazyLongLegs(this, 400, 350);
         this.enemiesGroup.add(crazyLongLegs.sprite);
     }
 

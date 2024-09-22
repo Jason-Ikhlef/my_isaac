@@ -1,4 +1,4 @@
-import Pooter from "./pooter.js";
+import Pooter from './pooter.js';
 
 export function createAnimations(scene) {
   scene.anims.create({
@@ -76,13 +76,37 @@ export function createAnimations(scene) {
   scene.anims.create({
     key: 'pooter_shoot',
     frames: scene.anims.generateFrameNames('pooter', {
-        prefix: 'pooter_',
-        start: 1,
-        end: 14,
-        zeroPad: 4,
-      }),
+      prefix: 'pooter_',
+      start: 1,
+      end: 14,
+      zeroPad: 4,
+    }),
     frameRate: 11,
-    repeat: 0
-});
+    repeat: 0,
+  });
 
+  scene.anims.create({
+    key: 'crazyLongLegs_move',
+    frames: scene.anims.generateFrameNames('crazyLongLegs', {
+      prefix: 'crazyLongLegs_',
+      start: 1,
+      end: 4,
+      zeroPad: 4,
+    }),
+    frameRate: 8,
+    repeat: -1,
+    yoyo: true,
+  });
+
+  scene.anims.create({
+    key: 'crazyLongLegs_shoot',
+    frames: scene.anims.generateFrameNames('crazyLongLegs', {
+      prefix: 'crazyLongLegs_',
+      start: 5,
+      end: 8,
+      zeroPad: 4,
+    }),
+    frameRate: 4,
+    repeat: 0,
+  });
 }
