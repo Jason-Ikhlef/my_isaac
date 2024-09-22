@@ -1,9 +1,10 @@
 import Player from "../player.js";
 import { createAnimations } from "../animations.js";
-import Pooter from "../pooter.js";
 import Doors from "../doors.js";
 import Floor from "../floor.js";
 import Borders from "../borders.js";
+import Pooter from "../pooter.js";
+import CrazyLongLegs from "../crazyLongLegs.js";
 
 export default class FirstRightRoom extends Phaser.Scene {
     constructor() {
@@ -55,10 +56,33 @@ export default class FirstRightRoom extends Phaser.Scene {
         this.load.image("tears", "assets/characters/tears.png");
         this.load.audio("tears_fire", "sounds/sfx/tears.wav");
         this.load.audio("tears_block", "sounds/sfx/tear_block.wav");
+        this.load.atlas(
+            "pooter",
+            "assets/monsters/pooter.png",
+            "assets/animations/pooter.json"
+        );
+        this.load.audio("pooter_sound", "sounds/sfx/pooter_sound.wav");
         this.load.audio("pooter_tears", "sounds/sfx/pooter_tears.wav");
         this.load.audio("pooter_die", "sounds/sfx/pooter_die.wav");
-        this.load.audio("pooter_sound", "sounds/sfx/pooter_sound.wav");
-        this.load.image("blood_tears", "assets/monsters/blood_tears.png");
+        this.load.atlas(
+            "pooter",
+            "assets/monsters/pooter.png",
+            "assets/animations/pooter.json"
+        );
+
+        this.load.audio(
+            "crazyLongLegs_tears",
+            "sounds/sfx/crazyLongLegs_tears.wav"
+        );
+        this.load.audio(
+            "crazyLongLegs_die",
+            "sounds/sfx/crazyLongLegs_die.wav"
+        );
+        this.load.atlas(
+            "crazyLongLegs",
+            "assets/monsters/crazyLongLegs.png",
+            "assets/animations/crazyLongLegs.json"
+        );
     }
 
     create() {
@@ -104,8 +128,13 @@ export default class FirstRightRoom extends Phaser.Scene {
         basement_music.play({ volume: 0.1 });
 
         this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 500, 300);
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+
+        let pooter = new Pooter(this, 800, 350);
         this.enemiesGroup.add(pooter.sprite);
+
+        let crazyLongLegs = new CrazyLongLegs(this, 400, 350);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
     }
 
     update() {

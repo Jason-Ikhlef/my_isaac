@@ -48,14 +48,14 @@ export default class Player {
         }
     }
 
-    changeHealth(dmg) {        
-        if (dmg < 0) {
+    changeHealth(dmg) {     
+        if (dmg < 0 && !this.isInvincible) {
             this.scene.sound.play('isaac_hurt')
             this.startInvincibility();
+            this.health += dmg;
+            this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
         };
 
-        this.health += dmg;
-        this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
         this.updateHearts();
     }
 
@@ -76,10 +76,10 @@ export default class Player {
     startInvincibility() {
         this.isInvincible = true;
         this.player.setAlpha(0.5);
-        setTimeout(() => {
+        this.scene.time.delayedCall(this.invincibilityDuration, () => {
             this.isInvincible = false;
             this.player.setAlpha(1);
-        }, this.invincibilityDuration);
+        });
     }
 
     update() {

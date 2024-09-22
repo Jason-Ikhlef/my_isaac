@@ -47,10 +47,31 @@ export default class SpawnRoom extends Phaser.Scene {
         this.load.image("tears", "assets/characters/tears.png");
         this.load.audio("tears_fire", "sounds/sfx/tears.wav");
         this.load.audio("tears_block", "sounds/sfx/tear_block.wav");
+
+        this.load.image("blood_tears", "assets/monsters/blood_tears.png");
+
+        this.load.audio("pooter_sound", "sounds/sfx/pooter_sound.wav");
         this.load.audio("pooter_tears", "sounds/sfx/pooter_tears.wav");
         this.load.audio("pooter_die", "sounds/sfx/pooter_die.wav");
-        this.load.audio("pooter_sound", "sounds/sfx/pooter_sound.wav");
-        this.load.image("blood_tears", "assets/monsters/blood_tears.png");
+        this.load.atlas(
+            "pooter",
+            "assets/monsters/pooter.png",
+            "assets/animations/pooter.json"
+        );
+
+        this.load.audio(
+            "crazyLongLegs_tears",
+            "sounds/sfx/crazyLongLegs_tears.wav"
+        );
+        this.load.audio(
+            "crazyLongLegs_die",
+            "sounds/sfx/crazyLongLegs_die.wav"
+        );
+        this.load.atlas(
+            "crazyLongLegs",
+            "assets/monsters/crazyLongLegs.png",
+            "assets/animations/crazyLongLegs.json"
+        );
     }
 
     create() {
