@@ -15,12 +15,10 @@ export function createAnimations(scene) {
                 "body_0013",
                 "body_0012",
                 "body_0011",
-                "body_0010",
             ],
         }),
-        frameRate: 10,
+        frameRate: 12,
         repeat: -1,
-        yoyo: true,
     });
 
     scene.anims.create({
@@ -31,9 +29,8 @@ export function createAnimations(scene) {
             end: 10,
             zeroPad: 4,
         }),
-        frameRate: 10,
+        frameRate: 12,
         repeat: -1,
-        yoyo: true,
     });
 
     scene.anims.create({
@@ -44,9 +41,8 @@ export function createAnimations(scene) {
             end: 30,
             zeroPad: 4,
         }),
-        frameRate: 10,
+        frameRate: 12,
         repeat: -1,
-        yoyo: true,
     });
 
     scene.anims.create({
@@ -57,9 +53,8 @@ export function createAnimations(scene) {
             end: 30,
             zeroPad: 4,
         }),
-        frameRate: 10,
+        frameRate: 12,
         repeat: -1,
-        yoyo: true,
     });
 
     scene.anims.create({

@@ -1,5 +1,3 @@
-import { createAnimations } from './animations.js';
-
 export default class Player {
     constructor(scene) {
         this.scene = scene;
