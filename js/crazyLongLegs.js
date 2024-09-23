@@ -14,8 +14,9 @@ export default class CrazyLongLegs extends Enemy {
         this.isAttacking = false;
         this.hasTarget = true;
 
+        this.sprite.setSize(40, 43);
+        this.sprite.setOffset(-1, 0);
         this.sprite.setScale(2);
-        this.sprite.setDepth(2);
 
         this.scene.time.addEvent({
             delay: 100,
