@@ -135,6 +135,10 @@ export default class FirstRightRoom extends Phaser.Scene {
 
         let crazyLongLegs = new CrazyLongLegs(this, 400, 350);
         this.enemiesGroup.add(crazyLongLegs.sprite);
+
+        this.input.keyboard.on("keydown-ESC", () => {
+            this.scene.pause();
+        });
     }
 
     update() {

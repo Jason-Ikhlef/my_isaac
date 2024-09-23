@@ -50,9 +50,12 @@ export default class Player {
         if (dmg < 0 && !this.isInvincible) {
             this.scene.sound.play('isaac_hurt')
             this.startInvincibility();
-            this.health += dmg;
-            this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
-        };
+        } else if (dmg > 0) {
+            this.scene.sound.play('isaac_heal');
+        }
+        
+        this.health += dmg;
+        this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
 
         this.updateHearts();
     }

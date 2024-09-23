@@ -1,3 +1,5 @@
+import DropManager from "./dropManager";
+
 export default class Enemy {
     constructor(scene, x, y, texture, name, contactDmg) {
         this.scene = scene;
@@ -18,6 +20,7 @@ export default class Enemy {
 
         this.ambientSound = null;
 
+        this.dropManager = new DropManager(scene);
         this.initAmbianceSound();
     }
 
@@ -55,6 +58,7 @@ export default class Enemy {
 
     die() {
         this.scene.sound.play(`${this.name}_die`)
+        this.dropManager.dropMob(this.name, this.sprite.x, this.sprite.y);
         this.scene.events.off('update', this.update, this);
         this.scene.physics.world.remove(this.sprite);
         this.sprite.destroy();
