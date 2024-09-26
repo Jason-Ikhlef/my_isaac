@@ -1,5 +1,5 @@
-import { config } from "./config.js";
+import { config } from './config.js';
 
-window.addEventListener("load", () => {
-    new Phaser.Game(config);
+window.addEventListener('load', () => {
+  new Phaser.Game(config);
 });

@@ -1,88 +1,70 @@
-import Player from "../player.js";
-import { createAnimations } from "../animations.js";
-import Doors from "../doors.js";
-import Floor from "../floor.js";
-import Borders from "../borders.js";
+import Doors from '../doors.js';
+import Floor from '../floor.js';
+import Borders from '../borders.js';
 
 export default class ItemRoom extends Phaser.Scene {
-    constructor() {
-        super("ItemRoom");
+  constructor() {
+    super('ItemRoom');
+    this.spikePositions = null;
+  }
 
-        this.keyZ = null;
-        this.keyS = null;
-        this.keyQ = null;
-        this.keyD = null;
-        this.lastDirection = "down";
+  create(data) {
+    this.setupWorld();
+    this.setupPlayer(data);
+    this.setupSpikes(this.spikePositions);
+    this.setupEnemies();
+    this.setupDoors();
+  }
+
+  update() {
+    this.player.update();
+    this.doorsController();
+  }
+
+  setupWorld() {
+    const worldWidth = window.innerWidth;
+    const worldHeight = window.innerHeight;
+
+    new Floor(this, worldWidth, worldHeight);
+    this.bordersGroup = this.physics.add.staticGroup();
+    new Borders(this, worldWidth, worldHeight);
+  }
+
+  setupPlayer(data) {
+    this.player = data.player;
+
+    if (data.spawnPosition && data.spawnPosition.x && data.spawnPosition.y) {
+      this.player.player.setPosition(
+        data.spawnPosition.x,
+        data.spawnPosition.y
+      );
     }
 
-    preload() {
-        this.load.spritesheet("basement", "assets/floors/Basement-Floor.png", {
-            frameWidth: 233,
-            frameHeight: 155,
-        });
+    this.physics.add.collider(this.player.player, this.bordersGroup);
+  }
 
-        this.load.spritesheet("basementDoor", "assets/floors/Doors.png", {
-            frameWidth: 50,
-            frameHeight: 33,
-        });
+  setupSpikes() {}
 
-        this.load.spritesheet("hearts", "assets/characters/hearts.png", {
-            frameWidth: 16,
-            frameHeight: 16,
-        });
+  setupEnemies() {}
 
-        this.load.image("spikes", "assets/floors/spikes.png");
-        this.load.atlas(
-            "head",
-            "assets/characters/head.png",
-            "assets/animations/head.json"
-        );
-        this.load.atlas(
-            "body",
-            "assets/characters/body.png",
-            "assets/animations/body.json"
-        );
-        this.load.audio("isaac_hurt", "sounds/sfx/isaac_hurt.wav");
-        this.load.audio("basement_music", "sounds/musics/dipteraSonata.ogg");
-        this.load.image("tears", "assets/characters/tears.png");
-        this.load.audio("tears_fire", "sounds/sfx/tears.wav");
-        this.load.audio("tears_block", "sounds/sfx/tear_block.wav");
-        this.load.audio("pooter_tears", "sounds/sfx/pooter_tears.wav");
-        this.load.audio("pooter_die", "sounds/sfx/pooter_die.wav");
-        this.load.audio("pooter_sound", "sounds/sfx/pooter_sound.wav");
-        this.load.image("blood_tears", "assets/monsters/blood_tears.png");
+  doorsController() {
+    if (this.enemiesGroup.children.entries.length === 0) {
+      this.physics.add.collider(this.player.player, this.leftDoor, () => {
+        this.scene
+          .get('GameScene')
+          .changeRoom('SecondRightRoom', this.scene.key, { x: 100, y: 300 });
+      });
     }
+  }
 
-    create() {
-        const worldWidth = window.innerWidth;
-        const worldHeight = window.innerHeight;
+  setupDoors() {
+    this.doors = new Doors(this);
+    this.leftDoor = this.doors.createLeftDoor();
+  }
 
-        new Floor(this, worldWidth, worldHeight);
-
-        this.bordersGroup = this.physics.add.staticGroup();
-
-        new Borders(this, worldWidth, worldHeight);
-
-        this.doors = new Doors(this);
-        this.leftDoor = this.doors.createLeftDoor();
-
-        this.player = new Player(this);
-
-        this.physics.add.collider(this.player.player, this.bordersGroup);
-        this.physics.add.collider(this.player.player, this.leftDoor, () => {
-            this.scene.switch("SecondRightRoom");
-        });
-
-        createAnimations(this);
-
-        this.cursors = this.input.keyboard.createCursorKeys();
-
-        const basement_music = this.sound.add("basement_music");
-        basement_music.loop = true;
-        basement_music.play({ volume: 0.1 });
+  onPlayerEnter(player, spawnPosition) {
+    if (spawnPosition && spawnPosition.x && spawnPosition.y) {
+      player.player.setPosition(spawnPosition.x, spawnPosition.y);
     }
-
-    update() {
-        this.player.update();
-    }
+  }
 }
