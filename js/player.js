@@ -1,7 +1,7 @@
 export default class Player {
   constructor(scene) {
     this.scene = scene;
-    
+
     this.head = scene.add.sprite(0, 0, 'head');
     this.body = scene.add.sprite(0, 17, 'body');
 
@@ -89,7 +89,7 @@ export default class Player {
     });
   }
 
-  update() {        
+  update() {
     const speed = 160;
     let velocityX = 0;
     let velocityY = 0;
@@ -225,12 +225,17 @@ export default class Player {
     tear.destroy();
   }
 
-  changeScene(newScene, spawnPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }) {
+  changeScene(newScene) {
+    this.scene.player.player.destroy();
     this.scene = newScene;
 
     this.head = newScene.add.sprite(0, 0, 'head');
     this.body = newScene.add.sprite(0, 17, 'body');
-    this.player = newScene.add.container(spawnPosition.x, spawnPosition.y, [this.head, this.body]);
+    this.player = scene.add.container(
+      window.innerWidth / 2,
+      window.innerHeight / 2,
+      [this.head, this.body]
+    );
 
     newScene.physics.world.enable(this.player);
     this.player.body.setCollideWorldBounds(true);

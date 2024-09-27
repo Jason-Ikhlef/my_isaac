@@ -47,8 +47,6 @@ export default class FirstTopRoom extends Phaser.Scene {
       );
     }
 
-    console.log(this.player);
-
     this.physics.add.collider(this.player.player, this.bordersGroup);
   }
 
@@ -77,12 +75,10 @@ export default class FirstTopRoom extends Phaser.Scene {
   doorsController() {
     if (this.enemiesGroup.children.entries.length === 0) {
       this.physics.add.collider(this.player.player, this.downDoor, () => {
-        this.scene
-          .get('GameScene')
-          .changeRoom('SpawnRoom', this.scene.key, {
-            x: window.innerWidth / 2,
-            y: window.innerHeight - 198,
-          });
+        this.scene.get('GameScene').changeRoom('SpawnRoom', this.scene.key, {
+          x: window.innerWidth / 2,
+          y: window.innerHeight - 198,
+        });
       });
       this.physics.add.collider(this.player.player, this.upDoor, () => {
         this.scene
@@ -105,8 +101,7 @@ export default class FirstTopRoom extends Phaser.Scene {
     if (spawnPosition && spawnPosition.x && spawnPosition.y) {
       player.player.setPosition(spawnPosition.x, spawnPosition.y);
     }
-  
+
     this.physics.add.collider(player.player, this.bordersGroup);
   }
-  
 }

@@ -83,8 +83,6 @@ export default class GameScene extends Phaser.Scene {
     this.player.changeScene(newScene);
 
     if (this.scenesStatus[newRoomKey]) {
-      console.log('Re-entrée dans une scène existante');
-
       if (currentRoom) {
         this.scene.pause(currentRoom);
       }
