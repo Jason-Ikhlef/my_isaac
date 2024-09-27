@@ -92,10 +92,4 @@ export default class FirstRightRoom extends Phaser.Scene {
     this.leftDoor = this.doors.createLeftDoor();
     this.rightDoor = this.doors.createRightDoor();
   }
-
-  onPlayerEnter(player, spawnPosition) {
-    if (spawnPosition && spawnPosition.x && spawnPosition.y) {
-      player.player.setPosition(spawnPosition.x, spawnPosition.y);
-    }
-  }
 }

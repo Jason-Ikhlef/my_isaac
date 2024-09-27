@@ -61,10 +61,4 @@ export default class ItemRoom extends Phaser.Scene {
     this.doors = new Doors(this);
     this.leftDoor = this.doors.createLeftDoor();
   }
-
-  onPlayerEnter(player, spawnPosition) {
-    if (spawnPosition && spawnPosition.x && spawnPosition.y) {
-      player.player.setPosition(spawnPosition.x, spawnPosition.y);
-    }
-  }
 }

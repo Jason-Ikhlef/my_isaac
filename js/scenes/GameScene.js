@@ -77,10 +77,10 @@ export default class GameScene extends Phaser.Scene {
     createAnimations(this);
   }
 
-  changeRoom(newRoomKey, currentRoom = null, spawnPosition = null) {
+  changeRoom(newRoomKey, currentRoom = null, spawnPosition = {x: window.innerWidth / 2, y: window.innerHeight / 2}) {
     const newScene = this.scene.get(newRoomKey);
 
-    this.player.changeScene(newScene);
+    this.player.changeScene(newScene, spawnPosition);
 
     if (this.scenesStatus[newRoomKey]) {
       if (currentRoom) {
@@ -89,8 +89,6 @@ export default class GameScene extends Phaser.Scene {
 
       this.scene.bringToTop(newRoomKey);
       this.scene.resume(newRoomKey);
-
-      newScene.onPlayerEnter(this.player, spawnPosition);
     } else {
       if (currentRoom) {
         this.scene.pause(currentRoom);

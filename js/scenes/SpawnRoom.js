@@ -58,12 +58,4 @@ export default class SpawnRoom extends Phaser.Scene {
       this.scene.get('GameScene').changeRoom('FirstRightRoom', this.scene.key);
     });
   }
-
-  onPlayerEnter(player, spawnPosition) {
-    if (spawnPosition && spawnPosition.x && spawnPosition.y) {
-      player.player.setPosition(spawnPosition.x, spawnPosition.y);
-    }
-
-    this.physics.add.collider(player.player, this.bordersGroup);
-  }
 }

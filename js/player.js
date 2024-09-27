@@ -225,13 +225,13 @@ export default class Player {
     tear.destroy();
   }
 
-  changeScene(newScene) {
+  changeScene(newScene, spawnPosition) {
     this.scene.player.player.destroy();
     this.scene = newScene;
 
     this.head = newScene.add.sprite(0, 0, 'head');
     this.body = newScene.add.sprite(0, 17, 'body');
-    this.player = scene.add.container(
+    this.player = newScene.add.container(
       window.innerWidth / 2,
       window.innerHeight / 2,
       [this.head, this.body]
@@ -242,5 +242,7 @@ export default class Player {
     this.player.body.setSize(26, 38);
     this.player.body.setOffset(-15, -14);
     this.player.setDepth(2).setScale(1.8);
+
+    this.player.setPosition(spawnPosition.x, spawnPosition.y);
   }
 }

@@ -77,7 +77,10 @@ export default class ThirdTopRoom extends Phaser.Scene {
       this.physics.add.collider(this.player.player, this.downDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('SecondTopRoom', this.scene.key, { x: 750, y: 650 });
+          .changeRoom('SecondTopRoom', this.scene.key, { 
+            x: window.innerWidth / 2,
+            y: window.innerHeight - 782,
+           });
       });
     }
   }
@@ -85,11 +88,5 @@ export default class ThirdTopRoom extends Phaser.Scene {
   setupDoors() {
     this.doors = new Doors(this);
     this.downDoor = this.doors.createDownDoor();
-  }
-
-  onPlayerEnter(player, spawnPosition) {
-    if (spawnPosition && spawnPosition.x && spawnPosition.y) {
-      player.player.setPosition(spawnPosition.x, spawnPosition.y);
-    }
   }
 }
