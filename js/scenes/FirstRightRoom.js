@@ -77,12 +77,18 @@ export default class FirstRightRoom extends Phaser.Scene {
       this.physics.add.collider(this.player.player, this.leftDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('SpawnRoom', this.scene.key, { x: 100, y: 300 });
+          .changeRoom('SpawnRoom', this.scene.key, { 
+            x: window.innerWidth - 498,
+            y: window.innerHeight / 2,
+           });
       });
       this.physics.add.collider(this.player.player, this.rightDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('SecondRightRoom', this.scene.key, { x: 100, y: 300 });
+          .changeRoom('SecondRightRoom', this.scene.key, {
+            x: window.innerHeight - 440,
+            y: window.innerHeight / 2,
+          });
       });
     }
   }

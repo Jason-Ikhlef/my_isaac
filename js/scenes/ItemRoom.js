@@ -52,7 +52,10 @@ export default class ItemRoom extends Phaser.Scene {
       this.physics.add.collider(this.player.player, this.leftDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('SecondRightRoom', this.scene.key, { x: 100, y: 300 });
+          .changeRoom('SecondRightRoom', this.scene.key, {
+            x: window.innerWidth - 498,
+            y: window.innerHeight / 2,
+          });
       });
     }
   }

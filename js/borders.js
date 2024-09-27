@@ -44,5 +44,10 @@ export default class Borders {
     );
     this.scene.physics.add.existing(this.borderRight, true);
     this.scene.bordersGroup.add(this.borderRight);
+
+    this.borderTop.setAlpha(0);
+    this.borderBottom.setAlpha(0);
+    this.borderLeft.setAlpha(0);
+    this.borderRight.setAlpha(0);
   }
 }

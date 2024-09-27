@@ -55,7 +55,10 @@ export default class SpawnRoom extends Phaser.Scene {
       });
     });
     this.physics.add.collider(this.player.player, this.rightDoor, () => {
-      this.scene.get('GameScene').changeRoom('FirstRightRoom', this.scene.key);
+      this.scene.get('GameScene').changeRoom('FirstRightRoom', this.scene.key, {
+        x: window.innerHeight - 440,
+        y: window.innerHeight / 2,
+      });
     });
   }
 }

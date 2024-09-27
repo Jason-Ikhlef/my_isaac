@@ -16,15 +16,16 @@ export default class Doors {
   createRightDoor() {
     this.rightDoor = this.scene.add
       .sprite(
-        window.innerWidth - 460,
-        window.innerHeight / 2 - 50,
+        window.innerWidth - 410,
+        window.innerHeight / 2,
         'basementDoor'
       )
-      .setOrigin(0, 0)
+      .setOrigin(0.5, 0.5)
       .setDisplaySize(130, 100)
       .setRotation(Phaser.Math.DegToRad(90));
     this.scene.physics.add.existing(this.rightDoor, true);
     this.rightDoor.body.setSize(80, 50);
+    this.rightDoor.body.setOffset(0, 25); 
     return this.rightDoor;
   }
 
@@ -45,12 +46,13 @@ export default class Doors {
 
   createLeftDoor() {
     this.leftDoor = this.scene.add
-      .sprite(380, window.innerHeight / 2 + 70, 'basementDoor')
-      .setOrigin(0, 0)
+      .sprite(440, window.innerHeight / 2, 'basementDoor')
+      .setOrigin(0.5, 0.5)
       .setDisplaySize(130, 100)
       .setRotation(Phaser.Math.DegToRad(270));
     this.scene.physics.add.existing(this.leftDoor, true);
     this.leftDoor.body.setSize(80, 50);
+    this.leftDoor.body.setOffset(40, 25);
     return this.leftDoor;
   }
 }
