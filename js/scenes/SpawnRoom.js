@@ -1,6 +1,7 @@
 import Doors from '../doors.js';
 import Floor from '../floor.js';
 import Borders from '../borders.js';
+import Pooter from '../pooter.js';
 
 export default class SpawnRoom extends Phaser.Scene {
   constructor() {
@@ -10,7 +11,11 @@ export default class SpawnRoom extends Phaser.Scene {
   create(data) {
     this.setupWorld();
     this.setupPlayer(data);
-    this.setupDoors();
+    this.setupDoors();    
+
+    this.enemiesGroup = this.physics.add.group();
+    let pooter = new Pooter(this, 500, 300);
+    this.enemiesGroup.add(pooter.sprite);
   }
 
   update() {
@@ -59,11 +64,12 @@ export default class SpawnRoom extends Phaser.Scene {
   }
 
   onPlayerEnter(player, spawnPosition) {
-    console.log(player);
-    this.player = player.player;
-
     if (spawnPosition && spawnPosition.x && spawnPosition.y) {
       player.player.setPosition(spawnPosition.x, spawnPosition.y);
     }
-  }
+  
+    this.physics.add.collider(player.player, this.bordersGroup);
+
+    console.log(this)
+  }  
 }

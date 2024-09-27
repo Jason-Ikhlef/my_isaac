@@ -225,27 +225,36 @@ export default class Player {
     tear.destroy();
   }
 
-  changeScene(newScene) {
+  changeScene(newScene, spawnPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }) {
     this.scene = newScene;
-
-    this.head = newScene.add.sprite(0, 0, 'head');
-    this.body = newScene.add.sprite(0, 17, 'body');
-    this.player = newScene.add.container(
-      window.innerWidth / 2,
-      window.innerHeight / 2,
-      [this.head, this.body]
-    );
-
-    newScene.physics.world.enable(this.player);
-    this.player.body.setCollideWorldBounds(true);
-    this.player.body.setSize(26, 38);
-    this.player.body.setOffset(-15, -14);
-    this.player.setDepth(2);
-    this.player.setScale(1.8);
-
+    
+    if (!this.scene.player) {
+      console.log("Création du joueur");
+      
+      this.head = newScene.add.sprite(0, 0, 'head');
+      this.body = newScene.add.sprite(0, 17, 'body');
+      this.player = newScene.add.container(spawnPosition.x, spawnPosition.y, [this.head, this.body]);
+  
+      newScene.physics.world.enable(this.player);
+      this.player.body.setCollideWorldBounds(true);
+      this.player.body.setSize(26, 38);
+      this.player.body.setOffset(-15, -14);
+      this.player.setDepth(2);
+      this.player.setScale(1.8);
+    } else {
+      console.log("Réutilisation du joueur existant");
+      
+      newScene.children.add(this.player);
+      this.player.setPosition(spawnPosition.x, spawnPosition.y);
+    
+      if (!this.player.body) {
+        newScene.physics.world.enable(this.player);
+      }
+  
+      this.player.setDepth(10);
+    }
+  
     this.setupInput(newScene);
-
-    console.log(newScene)
   }
 
   setupInput(scene) {

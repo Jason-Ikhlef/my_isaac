@@ -5,6 +5,7 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'GameScene' });
     this.scenesStatus = {};
+    this.call = 0;
   }
 
   preload() {
@@ -76,33 +77,30 @@ export default class GameScene extends Phaser.Scene {
     createAnimations(this);
   }
 
-  changeRoom(
-    newRoomKey,
-    currentRoom = null,
-    spawnPosition = { x: null, y: null }
-  ) {
+  changeRoom(newRoomKey, currentRoom = null, spawnPosition = null) {
+    const newScene = this.scene.get(newRoomKey);
 
-    if (currentRoom) {
-      currentRoom.player.destroy();
-    }
+    this.player.changeScene(newScene);
 
-    this.player.changeScene(this.scene.get(newRoomKey));
-    
     if (this.scenesStatus[newRoomKey]) {
-      console.log("new");
-      this.scene.get(newRoomKey).onPlayerEnter(this.player, spawnPosition);
-      this.scene.resume(newRoomKey);
-      if (currentRoom) {
-        this.scene.pause(currentRoom);
-      }
+        console.log("Re-entrée dans une scène existante");
+
+        if (currentRoom) {
+            this.scene.pause(currentRoom);
+        }
+
+        this.scene.bringToTop(newRoomKey);
+        this.scene.resume(newRoomKey);
+
+        newScene.onPlayerEnter(this.player, spawnPosition);
     } else {
-      if (currentRoom) {
-        this.scene.pause(currentRoom);
-      }
-      this.scenesStatus[newRoomKey] = true;
-      this.scene.launch(newRoomKey, { player: this.player, spawnPosition });
+        if (currentRoom) {
+            this.scene.pause(currentRoom);
+        }
+        this.scenesStatus[newRoomKey] = true;
+        this.scene.launch(newRoomKey, { player: this.player, spawnPosition });
     }
-  }
+}
 
   update() {
     this.player.update();
