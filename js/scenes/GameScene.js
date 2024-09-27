@@ -83,24 +83,24 @@ export default class GameScene extends Phaser.Scene {
     this.player.changeScene(newScene);
 
     if (this.scenesStatus[newRoomKey]) {
-        console.log("Re-entrée dans une scène existante");
+      console.log('Re-entrée dans une scène existante');
 
-        if (currentRoom) {
-            this.scene.pause(currentRoom);
-        }
+      if (currentRoom) {
+        this.scene.pause(currentRoom);
+      }
 
-        this.scene.bringToTop(newRoomKey);
-        this.scene.resume(newRoomKey);
+      this.scene.bringToTop(newRoomKey);
+      this.scene.resume(newRoomKey);
 
-        newScene.onPlayerEnter(this.player, spawnPosition);
+      newScene.onPlayerEnter(this.player, spawnPosition);
     } else {
-        if (currentRoom) {
-            this.scene.pause(currentRoom);
-        }
-        this.scenesStatus[newRoomKey] = true;
-        this.scene.launch(newRoomKey, { player: this.player, spawnPosition });
+      if (currentRoom) {
+        this.scene.pause(currentRoom);
+      }
+      this.scenesStatus[newRoomKey] = true;
+      this.scene.launch(newRoomKey, { player: this.player, spawnPosition });
     }
-}
+  }
 
   update() {
     this.player.update();
