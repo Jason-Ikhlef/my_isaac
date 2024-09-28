@@ -8,16 +8,29 @@ export default class FirstRightRoom extends Phaser.Scene {
     constructor() {
         super("FirstRightRoom");
 
-        this.spikePositions = [
-            { x: 1380, y: 235 },
-            { x: 565, y: 665 },
+        let midWitdh = window.innerWidth / 2;
+        let midHeight = window.innerHeight / 2;
+        this.rockPositions = [
+            { x: midWitdh, y: midHeight },
+            { x: midWitdh + 45, y: midHeight },
+            { x: midWitdh + 90, y: midHeight },
+            { x: midWitdh - 45, y: midHeight },
+            { x: midWitdh - 90, y: midHeight },
+            { x: midWitdh, y: midHeight + 50 },
+            { x: midWitdh, y: midHeight + 100 },
+            { x: midWitdh, y: midHeight - 50 },
+            { x: midWitdh, y: midHeight - 100 },
+            { x: midWitdh - 45, y: midHeight + 50 },
+            { x: midWitdh + 45, y: midHeight + 50 },
+            { x: midWitdh + 45, y: midHeight - 50 },
+            { x: midWitdh - 45, y: midHeight - 50 },
         ];
     }
 
     create(data) {
         this.setupWorld();
         this.setupPlayer(data);
-        this.setupSpikes(this.spikePositions);
+        this.setupRocks(this.rockPositions);
         this.setupEnemies();
         this.setupDoors();
     }
@@ -53,32 +66,29 @@ export default class FirstRightRoom extends Phaser.Scene {
         this.physics.add.collider(this.player.player, this.bordersGroup);
     }
 
-    setupSpikes(positions) {
-        this.spikesGroup = this.physics.add.group({ immovable: true });
+    setupEnemies() {
+        this.enemiesGroup = this.physics.add.group();
+        let crazyLongLegs = new CrazyLongLegs(this, 580, 235);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
+        crazyLongLegs = new CrazyLongLegs(this, 1370, 235);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
+        crazyLongLegs = new CrazyLongLegs(this, 575, 665);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
+        crazyLongLegs = new CrazyLongLegs(this, 1370, 665);
+        this.enemiesGroup.add(crazyLongLegs.sprite);
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+        this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
+    }
+
+    setupRocks(positions) {
+        this.rocksGroup = this.physics.add.group({ immovable: true });
         positions.forEach((position) => {
-            let spike = this.spikesGroup.create(
-                position.x,
-                position.y,
-                "spikes"
-            );
+            let spike = this.rocksGroup.create(position.x, position.y, "rock");
             spike.setImmovable(true);
             spike.setDepth(1).setScale(1.8);
         });
 
-        this.physics.add.overlap(this.player.player, this.spikesGroup, () => {
-            if (!this.player.isInvincible) {
-                this.player.changeHealth(-1);
-                this.player.startInvincibility();
-            }
-        });
-    }
-
-    setupEnemies() {
-        this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 500, 300);
-        let crazyLongLegs = new CrazyLongLegs(this, 800, 500);
-        this.enemiesGroup.add(pooter.sprite);
-        this.enemiesGroup.add(crazyLongLegs.sprite);
+        this.physics.add.collider(this.player.player, this.rocksGroup);
     }
 
     doorsController() {

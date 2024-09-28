@@ -1,29 +1,17 @@
 import Doors from "../doors.js";
 import Floor from "../floor.js";
 import Borders from "../borders.js";
-import Pooter from "../pooter.js";
 
 export default class SpawnRoom extends Phaser.Scene {
     constructor() {
         super("SpawnRoom");
-
-        this.rockPositions = [
-            { x: 625, y: 235 },
-            { x: 580, y: 285 },
-            { x: 1325, y: 235 },
-            { x: 1370, y: 285 },
-            { x: 575, y: 615 },
-            { x: 620, y: 665 },
-            { x: 1370, y: 615 },
-            { x: 1325, y: 665 },
-        ];
     }
 
     create(data) {
         this.setupWorld();
         this.setupPlayer(data);
-        this.setupRocks(this.rockPositions);
-        this.setupEnemies();
+        // this.setupSpikes(this.spikePositions);
+        // this.setupEnemies();
         this.setupDoors();
     }
 
@@ -58,18 +46,6 @@ export default class SpawnRoom extends Phaser.Scene {
         this.physics.add.collider(this.player.player, this.bordersGroup);
     }
 
-    setupEnemies() {
-        this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 580, 235);
-        this.enemiesGroup.add(pooter.sprite);
-        pooter = new Pooter(this, 1370, 235);
-        this.enemiesGroup.add(pooter.sprite);
-        pooter = new Pooter(this, 575, 665);
-        this.enemiesGroup.add(pooter.sprite);
-        pooter = new Pooter(this, 1370, 665);
-        this.enemiesGroup.add(pooter.sprite);
-    }
-
     setupDoors() {
         this.doors = new Doors(this);
         this.upDoor = this.doors.createUpDoor();
@@ -92,6 +68,44 @@ export default class SpawnRoom extends Phaser.Scene {
                     x: 530,
                     y: window.innerHeight / 2,
                 });
+        });
+    }
+
+    setupEnemies() {
+        this.enemiesGroup = this.physics.add.group();
+        let crazyLongLegs = new CrazyLongLegs(
+            this,
+            window.innerWidth / 2 + 100,
+            window.innerHeight / 2
+        );
+        this.enemiesGroup.add(crazyLongLegs.sprite);
+        crazyLongLegs = new CrazyLongLegs(
+            this,
+            window.innerWidth / 2 - 100,
+            window.innerHeight / 2
+        );
+        this.enemiesGroup.add(crazyLongLegs.sprite);
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+        this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
+    }
+
+    setupSpikes(positions) {
+        this.spikesGroup = this.physics.add.group({ immovable: true });
+        positions.forEach((position) => {
+            let spike = this.spikesGroup.create(
+                position.x,
+                position.y,
+                "spikes"
+            );
+            spike.setImmovable(true);
+            spike.setDepth(1).setScale(1.8);
+        });
+
+        this.physics.add.overlap(this.player.player, this.spikesGroup, () => {
+            if (!this.player.isInvincible) {
+                this.player.changeHealth(-1);
+                this.player.startInvincibility();
+            }
         });
     }
 

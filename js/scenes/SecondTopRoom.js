@@ -7,11 +7,33 @@ export default class SecondTopRoom extends Phaser.Scene {
     constructor() {
         super("SecondTopRoom");
 
+        let midWidth = window.innerWidth / 2;
+        let midHeight = window.innerHeight / 2;
         this.spikePositions = [
-            { x: 565, y: 235 },
-            { x: 1380, y: 235 },
-            { x: 565, y: 665 },
-            { x: 1380, y: 665 },
+            { x: midWidth, y: midHeight - 150 },
+            { x: midWidth, y: midHeight + 150 },
+            { x: midWidth + 45, y: midHeight - 150 },
+            { x: midWidth + 90, y: midHeight - 150 },
+            { x: midWidth + 135, y: midHeight - 150 },
+            { x: midWidth - 45, y: midHeight - 150 },
+            { x: midWidth - 90, y: midHeight - 150 },
+            { x: midWidth - 135, y: midHeight - 150 },
+            { x: midWidth + 45, y: midHeight + 150 },
+            { x: midWidth + 90, y: midHeight + 150 },
+            { x: midWidth + 135, y: midHeight + 150 },
+            { x: midWidth - 45, y: midHeight + 150 },
+            { x: midWidth - 90, y: midHeight + 150 },
+            { x: midWidth - 135, y: midHeight + 150 },
+            { x: midWidth + 180, y: midHeight + 100 },
+            { x: midWidth + 180, y: midHeight + 50 },
+            { x: midWidth + 180, y: midHeight },
+            { x: midWidth + 180, y: midHeight - 50 },
+            { x: midWidth + 180, y: midHeight - 100 },
+            { x: midWidth - 180, y: midHeight + 100 },
+            { x: midWidth - 180, y: midHeight + 50 },
+            { x: midWidth - 180, y: midHeight },
+            { x: midWidth - 180, y: midHeight - 50 },
+            { x: midWidth - 180, y: midHeight - 100 },
         ];
     }
 
@@ -76,8 +98,16 @@ export default class SecondTopRoom extends Phaser.Scene {
 
     setupEnemies() {
         this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 500, 300);
+        let pooter = new Pooter(this, 580, 235);
         this.enemiesGroup.add(pooter.sprite);
+        pooter = new Pooter(this, 1370, 235);
+        this.enemiesGroup.add(pooter.sprite);
+        pooter = new Pooter(this, 575, 665);
+        this.enemiesGroup.add(pooter.sprite);
+        pooter = new Pooter(this, 1370, 665);
+        this.enemiesGroup.add(pooter.sprite);
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+        this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
     }
 
     doorsController() {

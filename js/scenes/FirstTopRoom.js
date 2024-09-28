@@ -7,18 +7,22 @@ export default class FirstTopRoom extends Phaser.Scene {
     constructor() {
         super("FirstTopRoom");
 
-        this.spikePositions = [
-            { x: 565, y: 235 },
-            { x: 1380, y: 235 },
-            { x: 565, y: 665 },
-            { x: 1380, y: 665 },
+        this.rockPositions = [
+            { x: 625, y: 235 },
+            { x: 580, y: 285 },
+            { x: 1325, y: 235 },
+            { x: 1370, y: 285 },
+            { x: 575, y: 615 },
+            { x: 620, y: 665 },
+            { x: 1370, y: 615 },
+            { x: 1325, y: 665 },
         ];
     }
 
     create(data) {
         this.setupWorld();
         this.setupPlayer(data);
-        this.setupSpikes(this.spikePositions);
+        this.setupRocks(this.rockPositions);
         this.setupEnemies();
         this.setupDoors();
     }
@@ -76,8 +80,16 @@ export default class FirstTopRoom extends Phaser.Scene {
 
     setupEnemies() {
         this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 500, 300);
+        let pooter = new Pooter(this, 580, 235);
         this.enemiesGroup.add(pooter.sprite);
+        pooter = new Pooter(this, 1370, 235);
+        this.enemiesGroup.add(pooter.sprite);
+        pooter = new Pooter(this, 575, 665);
+        this.enemiesGroup.add(pooter.sprite);
+        pooter = new Pooter(this, 1370, 665);
+        this.enemiesGroup.add(pooter.sprite);
+        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+        this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
     }
 
     doorsController() {
@@ -105,5 +117,16 @@ export default class FirstTopRoom extends Phaser.Scene {
         this.doors = new Doors(this);
         this.upDoor = this.doors.createUpDoor();
         this.downDoor = this.doors.createDownDoor();
+    }
+
+    setupRocks(positions) {
+        this.rocksGroup = this.physics.add.group({ immovable: true });
+        positions.forEach((position) => {
+            let spike = this.rocksGroup.create(position.x, position.y, "rock");
+            spike.setImmovable(true);
+            spike.setDepth(1).setScale(1.8);
+        });
+
+        this.physics.add.collider(this.player.player, this.rocksGroup);
     }
 }
