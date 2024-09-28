@@ -94,26 +94,19 @@ export default class GameScene extends Phaser.Scene {
   ) {
     const newScene = this.scene.get(newRoomKey);
 
-    if (currentRoom) {
-      this.currentRoom = currentRoom;
-    }
-
     this.player.changeScene(newScene, spawnPosition);
     this.scene.bringToTop(newRoomKey);
 
     if (this.scenesStatus[newRoomKey]) {
-      if (currentRoom) {
-        this.scene.pause(currentRoom);
-      }
+      this.scene.pause(currentRoom);
       this.scene.resume(newRoomKey);
     } else {
-      if (currentRoom) {
-        this.scene.pause(currentRoom);
-      }
+      this.scene.pause(currentRoom);
       this.scenesStatus[newRoomKey] = true;
-      this.scene.launch(newRoomKey, { player: this.player, spawnPosition });
+      this.scene.launch(newRoomKey, { player: this.player });
     }
 
+    this.currentRoom = newRoomKey;
     this.scene.bringToTop('FadeOverlayScene');
   }
 
@@ -171,5 +164,12 @@ export default class GameScene extends Phaser.Scene {
     this.scene.bringToTop('FadeOverlayScene');
 
     this.isPause = !this.isPause;
+  }
+
+  onPlayerDeath() {
+    this.scene.pause(this.currentRoom);
+    this.scene.launch('DeathScene');
+    this.scene.bringToTop('DeathScene');
+    this.scene.bringToTop('FadeOverlayScene');
   }
 }

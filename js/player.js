@@ -64,6 +64,10 @@ export default class Player {
     this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
 
     this.updateHearts();
+    if (this.health === 0) {
+      // ajouter le son de la mort
+      this.scene.scene.get('GameScene').onPlayerDeath();
+    }
   }
 
   updateHearts() {
@@ -90,6 +94,8 @@ export default class Player {
   }
 
   update() {
+    if (this.health === 0) return;
+
     const speed = 160;
     let velocityX = 0;
     let velocityY = 0;
