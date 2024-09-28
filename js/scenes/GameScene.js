@@ -5,7 +5,8 @@ export default class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: 'GameScene' });
     this.scenesStatus = {};
-    this.call = 0;
+    this.currentRoom = 'SpawnRoom';
+    this.isPause = false;
   }
 
   preload() {
@@ -75,19 +76,35 @@ export default class GameScene extends Phaser.Scene {
 
     this.changeRoom('SpawnRoom');
     createAnimations(this);
+
+    this.input.keyboard.on('keydown-ESC', () => this.togglePause(), this);
+
+    this.scene.launch('FadeOverlayScene');
+    this.fadeOverlay = this.scene.get('FadeOverlayScene');
+
+    this.rKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+    this.isHoldingR = false;
+    this.holdTime = 0;
   }
 
-  changeRoom(newRoomKey, currentRoom = null, spawnPosition = {x: window.innerWidth / 2, y: window.innerHeight / 2}) {
+  changeRoom(
+    newRoomKey,
+    currentRoom = null,
+    spawnPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+  ) {
     const newScene = this.scene.get(newRoomKey);
 
+    if (currentRoom) {
+      this.currentRoom = currentRoom;
+    }
+
     this.player.changeScene(newScene, spawnPosition);
+    this.scene.bringToTop(newRoomKey);
 
     if (this.scenesStatus[newRoomKey]) {
       if (currentRoom) {
         this.scene.pause(currentRoom);
       }
-
-      this.scene.bringToTop(newRoomKey);
       this.scene.resume(newRoomKey);
     } else {
       if (currentRoom) {
@@ -96,9 +113,63 @@ export default class GameScene extends Phaser.Scene {
       this.scenesStatus[newRoomKey] = true;
       this.scene.launch(newRoomKey, { player: this.player, spawnPosition });
     }
+
+    this.scene.bringToTop('FadeOverlayScene');
   }
 
-  update() {
+  update(time, delta) {
     this.player.update();
+
+    if (this.rKey.isDown) {
+      if (!this.isHoldingR) {
+        this.isHoldingR = true;
+        this.holdTime = 0;
+
+        this.fadeOverlay.resetOverlay();
+      } else {
+        this.holdTime += delta;
+        const progress = Phaser.Math.Clamp(this.holdTime / 3000, 0, 1);
+
+        this.fadeOverlay.overlay.clear();
+        this.fadeOverlay.overlay.fillStyle(0x000000, progress);
+        this.fadeOverlay.overlay.fillRect(
+          0,
+          0,
+          window.innerWidth,
+          window.innerHeight
+        );
+
+        if (this.holdTime >= 3000) {
+          this.rKey.enabled = false;
+          this.togglePause();
+          localStorage.setItem('skipTitle', 'true');
+          location.reload();
+
+          this.holdTime = 0;
+        }
+      }
+    } else {
+      if (this.isHoldingR) {
+        this.isHoldingR = false;
+        this.holdTime = 0;
+
+        this.fadeOverlay.resetOverlay();
+      }
+    }
+  }
+
+  togglePause(restart = false) {
+    if (!this.isPause && !restart) {
+      this.scene.pause(this.currentRoom);
+      this.scene.launch('PauseScene');
+      this.scene.bringToTop('PauseScene');
+    } else {
+      this.scene.resume(this.currentRoom);
+      this.scene.stop('PauseScene');
+    }
+
+    this.scene.bringToTop('FadeOverlayScene');
+
+    this.isPause = !this.isPause;
   }
 }

@@ -23,6 +23,15 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create() {
+    const skipTitle = localStorage.getItem('skipTitle');
+
+    if (skipTitle === 'true') {
+      localStorage.removeItem('skipTitle');
+      this.scene.start('GameScene');
+
+      return;
+    }
+
     const title_music = this.sound.add('title_music');
     title_music.loop = true;
     title_music.play({ volume: 0.1 });

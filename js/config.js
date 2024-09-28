@@ -7,6 +7,8 @@ import SecondRightRoom from './scenes/SecondRightRoom.js';
 import ItemRoom from './scenes/ItemRoom.js';
 import TitleScene from './scenes/TitleScene.js';
 import GameScene from './scenes/GameScene.js';
+import PauseScene from './scenes/PauseScene.js';
+import FadeOverlayScene from './scenes/FadeOverlayScene.js';
 
 export const config = {
   type: Phaser.AUTO,
@@ -15,6 +17,7 @@ export const config = {
   scene: [
     TitleScene,
     GameScene,
+    PauseScene,
     SpawnRoom,
     FirstTopRoom,
     SecondTopRoom,
@@ -22,6 +25,7 @@ export const config = {
     FirstRightRoom,
     SecondRightRoom,
     ItemRoom,
+    FadeOverlayScene,
   ],
   physics: {
     default: 'arcade',

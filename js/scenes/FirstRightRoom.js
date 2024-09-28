@@ -22,7 +22,6 @@ export default class FirstRightRoom extends Phaser.Scene {
   }
 
   update() {
-    this.player.update();
     this.doorsController();
   }
 
@@ -75,12 +74,10 @@ export default class FirstRightRoom extends Phaser.Scene {
   doorsController() {
     if (this.enemiesGroup.children.entries.length === 0) {
       this.physics.add.collider(this.player.player, this.leftDoor, () => {
-        this.scene
-          .get('GameScene')
-          .changeRoom('SpawnRoom', this.scene.key, { 
-            x: window.innerWidth - 498,
-            y: window.innerHeight / 2,
-           });
+        this.scene.get('GameScene').changeRoom('SpawnRoom', this.scene.key, {
+          x: window.innerWidth - 498,
+          y: window.innerHeight / 2,
+        });
       });
       this.physics.add.collider(this.player.player, this.rightDoor, () => {
         this.scene

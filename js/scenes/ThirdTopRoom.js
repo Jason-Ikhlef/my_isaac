@@ -24,7 +24,6 @@ export default class ThirdTopRoom extends Phaser.Scene {
   }
 
   update() {
-    this.player.update();
     this.doorsController();
   }
 
@@ -77,10 +76,10 @@ export default class ThirdTopRoom extends Phaser.Scene {
       this.physics.add.collider(this.player.player, this.downDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('SecondTopRoom', this.scene.key, { 
+          .changeRoom('SecondTopRoom', this.scene.key, {
             x: window.innerWidth / 2,
             y: window.innerHeight - 782,
-           });
+          });
       });
     }
   }

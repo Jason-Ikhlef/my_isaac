@@ -17,7 +17,6 @@ export default class ItemRoom extends Phaser.Scene {
   }
 
   update() {
-    this.player.update();
     this.doorsController();
   }
 
