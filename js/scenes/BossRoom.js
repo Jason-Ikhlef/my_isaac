@@ -7,11 +7,43 @@ export default class BossRoom extends Phaser.Scene {
     constructor() {
         super("BossRoom");
 
-        this.spikePositions = [
-            { x: 565, y: 235 },
-            { x: 1380, y: 235 },
-            { x: 565, y: 665 },
-            { x: 1380, y: 665 },
+        let midWidth = window.innerWidth / 2;
+        let midHeight = window.innerHeight / 2;
+        this.rockPositions = [
+            { x: midWidth + 135, y: midHeight + 150 },
+            { x: midWidth - 135, y: midHeight + 150 },
+            { x: midWidth + 270, y: midHeight + 150 },
+            { x: midWidth - 270, y: midHeight + 150 },
+            { x: midWidth + 405, y: midHeight + 150 },
+            { x: midWidth - 405, y: midHeight + 150 },
+            { x: midWidth, y: midHeight + 150 },
+            { x: midWidth + 135, y: midHeight - 150 },
+            { x: midWidth - 135, y: midHeight - 150 },
+            { x: midWidth + 270, y: midHeight - 150 },
+            { x: midWidth - 270, y: midHeight - 150 },
+            { x: midWidth + 405, y: midHeight - 150 },
+            { x: midWidth - 405, y: midHeight - 150 },
+            { x: midWidth, y: midHeight - 150 },
+            { x: midWidth + 135, y: midHeight },
+            { x: midWidth - 135, y: midHeight },
+            { x: midWidth + 270, y: midHeight },
+            { x: midWidth - 270, y: midHeight },
+            { x: midWidth + 405, y: midHeight },
+            { x: midWidth - 405, y: midHeight },
+            { x: midWidth, y: midHeight },
+            { x: midWidth + 135, y: midHeight + 290 },
+            { x: midWidth - 135, y: midHeight + 290 },
+            { x: midWidth + 270, y: midHeight + 290 },
+            { x: midWidth - 270, y: midHeight + 290 },
+            { x: midWidth + 405, y: midHeight + 290 },
+            { x: midWidth - 405, y: midHeight + 290 },
+            { x: midWidth + 135, y: midHeight - 290 },
+            { x: midWidth - 135, y: midHeight - 290 },
+            { x: midWidth + 270, y: midHeight - 290 },
+            { x: midWidth - 270, y: midHeight - 290 },
+            { x: midWidth + 405, y: midHeight - 290 },
+            { x: midWidth - 405, y: midHeight - 290 },
+            { x: midWidth, y: midHeight - 290 },
         ];
     }
 
@@ -30,8 +62,8 @@ export default class BossRoom extends Phaser.Scene {
         // }, 5000);
         this.setupWorld();
         this.setupPlayer(data);
-        this.setupSpikes(this.spikePositions);
-        this.setupEnemies();
+        this.setupRocks(this.rockPositions);
+        // this.setupEnemies();
         this.setupDoors();
     }
 
@@ -66,43 +98,30 @@ export default class BossRoom extends Phaser.Scene {
         this.physics.add.collider(this.player.player, this.bordersGroup);
     }
 
-    setupSpikes(positions) {
-        this.spikesGroup = this.physics.add.group({ immovable: true });
+    setupRocks(positions) {
+        this.rocksGroup = this.physics.add.group({ immovable: true });
         positions.forEach((position) => {
-            let spike = this.spikesGroup.create(
-                position.x,
-                position.y,
-                "spikes"
-            );
+            let spike = this.rocksGroup.create(position.x, position.y, "rock");
             spike.setImmovable(true);
             spike.setDepth(1).setScale(1.8);
         });
 
-        this.physics.add.overlap(this.player.player, this.spikesGroup, () => {
-            if (!this.player.isInvincible) {
-                this.player.changeHealth(-1);
-                this.player.startInvincibility();
-            }
-        });
+        this.physics.add.collider(this.player.player, this.rocksGroup);
     }
 
-    setupEnemies() {
-        this.enemiesGroup = this.physics.add.group();
-        let pooter = new Pooter(this, 500, 300);
-        this.enemiesGroup.add(pooter.sprite);
-    }
+    setupEnemies() {}
 
     doorsController() {
-        if (this.enemiesGroup.children.entries.length === 0) {
-            this.physics.add.collider(this.player.player, this.downDoor, () => {
-                this.scene
-                    .get("GameScene")
-                    .changeRoom("ThirdTopRoom", this.scene.key, {
-                        x: window.innerWidth / 2,
-                        y: window.innerHeight - 750,
-                    });
-            });
-        }
+        // if (this.enemiesGroup.children.entries.length === 0) {
+        this.physics.add.collider(this.player.player, this.downDoor, () => {
+            this.scene
+                .get("GameScene")
+                .changeRoom("ThirdTopRoom", this.scene.key, {
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight - 750,
+                });
+        });
+        // }
     }
 
     setupDoors() {
