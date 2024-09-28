@@ -36,7 +36,12 @@ export default class GameScene extends Phaser.Scene {
       'assets/characters/body.png',
       'assets/animations/body.json'
     );
-    this.load.audio('isaac_hurt', 'sounds/sfx/isaac_hurt.wav');
+    this.load.audio('isaac_hurt_1', 'sounds/sfx/isaac_hurt_1.wav');
+    this.load.audio('isaac_hurt_2', 'sounds/sfx/isaac_hurt_2.wav');
+    this.load.audio('isaac_hurt_3', 'sounds/sfx/isaac_hurt_3.wav');
+    this.load.audio('isaac_die_1', 'sounds/sfx/isaac_die_1.wav');
+    this.load.audio('isaac_die_2', 'sounds/sfx/isaac_die_2.wav');
+    this.load.audio('isaac_die_3', 'sounds/sfx/isaac_die_3.wav');
     this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
     this.load.image('tears', 'assets/characters/tears.png');
     this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
@@ -152,6 +157,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   togglePause(restart = false) {
+    if (this.currentRoom === 'DeathScene') return;
     if (!this.isPause && !restart) {
       this.scene.pause(this.currentRoom);
       this.scene.launch('PauseScene');
@@ -168,6 +174,7 @@ export default class GameScene extends Phaser.Scene {
 
   onPlayerDeath() {
     this.scene.pause(this.currentRoom);
+    this.currentRoom = 'DeathScene';
     this.scene.launch('DeathScene');
     this.scene.bringToTop('DeathScene');
     this.scene.bringToTop('FadeOverlayScene');

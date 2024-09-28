@@ -54,7 +54,8 @@ export default class Player {
 
   changeHealth(dmg) {
     if (dmg < 0 && !this.isInvincible) {
-      this.scene.sound.play('isaac_hurt');
+      const randomNumber = Phaser.Math.Between(1, 3)
+      this.scene.sound.play(`isaac_hurt_${randomNumber}`);
       this.startInvincibility();
     } else if (dmg > 0) {
       this.scene.sound.play('isaac_heal');
@@ -65,7 +66,8 @@ export default class Player {
 
     this.updateHearts();
     if (this.health === 0) {
-      // ajouter le son de la mort
+      const randomNumber = Phaser.Math.Between(1, 3)
+      this.scene.sound.play(`isaac_die_${randomNumber}`);
       this.scene.scene.get('GameScene').onPlayerDeath();
     }
   }
