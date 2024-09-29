@@ -4,16 +4,16 @@ export default class DropManager {
 
     this.lootTables = {
       pooter: [
-        { item: 'bomb', dropRate: [1, 30] },
-        { item: 'key', dropRate: [31, 50] },
-        { item: 'coin', dropRate: [51, 90] },
-        { item: 'heart', dropRate: [91, 100] },
+        { item: 'bomb', dropRate: [1, 10] },
+        { item: 'key', dropRate: [11, 20] },
+        { item: 'coin', dropRate: [21, 30] },
+        { item: 'heart', dropRate: [31, 100] },
       ],
       crazyLongLegs: [
-        { item: 'bomb', dropRate: [1, 30] },
-        { item: 'key', dropRate: [31, 50] },
-        { item: 'coin', dropRate: [51, 90] },
-        { item: 'heart', dropRate: [91, 100] },
+        { item: 'bomb', dropRate: [1, 10] },
+        { item: 'key', dropRate: [11, 20] },
+        { item: 'coin', dropRate: [21, 30] },
+        { item: 'heart', dropRate: [31, 100] },
       ],
     };
   }
@@ -57,10 +57,10 @@ export default class DropManager {
   }
 
   dropHeart(x, y) {
-    const dropRate = Phaser.Math.Between(1, 10);
+    const dropRate = Phaser.Math.Between(1, 5);
 
     if (dropRate === 1) {
-      const fullHeartRate = Phaser.Math.Between(1, 10);
+      const fullHeartRate = Phaser.Math.Between(1, 5);
 
       let heartValue, frameIndex;
       if (fullHeartRate === 1) {
@@ -73,7 +73,8 @@ export default class DropManager {
 
       const heart = this.scene.physics.add
         .sprite(x, y, 'hearts', frameIndex)
-        .setScale(2);
+        .setScale(2)
+        .setDepth(2);
 
       this.scene.physics.add.overlap(heart, this.scene.player.player, () => {
         this.scene.player.changeHealth(heartValue);

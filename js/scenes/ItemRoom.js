@@ -19,6 +19,8 @@ export default class ItemRoom extends Phaser.Scene {
 
     this.load.image('<3', 'assets/items/<3.png');
     this.load.image('aries', 'assets/items/aries.png');
+    this.load.image('spoon_bender', 'assets/items/spoon_bender.png');
+    this.load.image('nails', 'assets/items/nails.png');
 
     this.load.audio('itemPickup', 'sounds/sfx/item.wav');
   }
@@ -65,13 +67,11 @@ export default class ItemRoom extends Phaser.Scene {
   }
 
   doorsController() {
-    this.physics.add.collider(this.player.player, this.leftDoor, () => {
-      this.scene
-        .get('GameScene')
-        .changeRoom('SecondRightRoom', this.scene.key, {
-          x: window.innerWidth - 498,
-          y: window.innerHeight / 2,
-        });
+    this.physics.add.collider(this.player.player, this.rightDoor, () => {
+      this.scene.get('GameScene').changeRoom('SpawnRoom', this.scene.key, {
+        x: 530,
+        y: window.innerHeight / 2,
+      });
     });
     if (!this.doorsOpen) {
       this.updateDoorAppearance();
@@ -87,10 +87,10 @@ export default class ItemRoom extends Phaser.Scene {
     const hasEnemies =
       this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
 
-    this.leftDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
+    this.rightDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
 
     if (!hasEnemies) {
-      this.leftDoor.setRotation(Phaser.Math.DegToRad(-180));
+      this.rightDoor.setRotation(0);
       this.scene.get('GameScene').sound.play('doorOpen');
       this.doorsOpen = true;
     }
@@ -98,7 +98,7 @@ export default class ItemRoom extends Phaser.Scene {
 
   setupDoors() {
     this.doors = new Doors(this);
-    this.leftDoor = this.doors.createLeftDoor();
+    this.rightDoor = this.doors.createRightDoor();
   }
 
   handleResume() {

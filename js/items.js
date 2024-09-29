@@ -16,6 +16,22 @@ const items = [
       player.movementSpeed *= 1.5;
     },
   },
+  {
+    name: 'spoon_bender',
+    texture: 'spoon_bender',
+    effect: (player) => {
+      player.hasHoming = true;
+    },
+  },
+  {
+    name: 'nails',
+    texture: 'nails',
+    effect: (player) => {
+      player.damage += 2;
+      player.hasNails = true;
+      player.knockback += 100;
+    },
+  },
 ];
 
 export default items;
