@@ -20,6 +20,7 @@ export default class Enemy {
       this
     );
     scene.physics.add.collider(this.sprite, scene.bordersGroup);
+    scene.physics.add.collider(this.sprite, scene.rockGroup);
 
     this.scene.events.on('update', this.update, this);
     this.sprite.setData('instance', this);
@@ -33,9 +34,8 @@ export default class Enemy {
       .events.on('volumeChanged', this.updateVolume, this);
   }
 
-  initAmbianceSound() {
-    this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
-    if (this.ambientSound) {
+  initAmbianceSound() {    
+    if (this.scene.cache.audio.has(`${this.name}_sound`)) {
       this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
       this.ambientSound.loop = true;
       this.ambientSound.setVolume(this.scene.scene.get('GameScene').sfxVolume);

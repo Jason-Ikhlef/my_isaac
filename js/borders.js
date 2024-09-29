@@ -17,7 +17,7 @@ export default class Borders {
 
     this.borderBottom = this.scene.add.rectangle(
       worldWidth / 2,
-      worldHeight * 0.88,
+      worldHeight * 0.84,
       worldWidth,
       10,
       0x000000

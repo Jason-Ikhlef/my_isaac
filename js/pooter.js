@@ -110,6 +110,14 @@ export default class Pooter extends Enemy {
             this.scene
         );
 
+        this.scene.physics.add.collider(
+          tear,
+          this.scene.rocksGroup,
+          this.handleTearCollision.bind(this),
+          null,
+          this.scene
+        );
+
         this.scene.physics.add.overlap(tear, this.scene.player.player, () => {
             this.scene.player.changeHealth(-this.damage);
             tear.destroy();

@@ -1,124 +1,117 @@
-import Doors from "../doors.js";
-import Floor from "../floor.js";
-import Borders from "../borders.js";
-import Pooter from "../pooter.js";
-import CrazyLongLegs from "../crazyLongLegs.js";
+import Doors from '../doors.js';
+import Floor from '../floor.js';
+import Borders from '../borders.js';
+import Pooter from '../pooter.js';
+import CrazyLongLegs from '../crazyLongLegs.js';
 
 export default class FirstRightRoom extends Phaser.Scene {
-    constructor() {
-        super("FirstRightRoom");
+  constructor() {
+    super('FirstRightRoom');
 
-        let midWitdh = window.innerWidth / 2;
-        let midHeight = window.innerHeight / 2;
-        this.rockPositions = [
-            { x: midWitdh, y: midHeight },
-            { x: midWitdh + 45, y: midHeight },
-            { x: midWitdh + 90, y: midHeight },
-            { x: midWitdh - 45, y: midHeight },
-            { x: midWitdh - 90, y: midHeight },
-            { x: midWitdh, y: midHeight + 50 },
-            { x: midWitdh, y: midHeight + 100 },
-            { x: midWitdh, y: midHeight - 50 },
-            { x: midWitdh, y: midHeight - 100 },
-            { x: midWitdh - 45, y: midHeight + 50 },
-            { x: midWitdh + 45, y: midHeight + 50 },
-            { x: midWitdh + 45, y: midHeight - 50 },
-            { x: midWitdh - 45, y: midHeight - 50 },
-        ];
+    let midWitdh = window.innerWidth / 2;
+    let midHeight = window.innerHeight / 2;
+    this.rockPositions = [
+      { x: midWitdh, y: midHeight },
+      { x: midWitdh + 45, y: midHeight },
+      { x: midWitdh + 90, y: midHeight },
+      { x: midWitdh - 45, y: midHeight },
+      { x: midWitdh - 90, y: midHeight },
+      { x: midWitdh, y: midHeight + 50 },
+      { x: midWitdh, y: midHeight + 100 },
+      { x: midWitdh, y: midHeight - 50 },
+      { x: midWitdh, y: midHeight - 100 },
+      { x: midWitdh - 45, y: midHeight + 50 },
+      { x: midWitdh + 45, y: midHeight + 50 },
+      { x: midWitdh + 45, y: midHeight - 50 },
+      { x: midWitdh - 45, y: midHeight - 50 },
+    ];
+  }
+
+  create(data) {
+    this.setupWorld();
+    this.setupPlayer(data);
+    this.setupRocks(this.rockPositions);
+    this.setupEnemies();
+    this.setupDoors();
+  }
+
+  update() {
+    this.doorsController();
+  }
+
+  setupWorld() {
+    const worldWidth = window.innerWidth;
+    const worldHeight = window.innerHeight;
+
+    new Floor(this, worldWidth, worldHeight);
+    this.bordersGroup = this.physics.add.staticGroup();
+    new Borders(this, worldWidth, worldHeight);
+  }
+
+  setupPlayer(data) {
+    this.player = data.player;
+
+    if (data.spawnPosition && data.spawnPosition.x && data.spawnPosition.y) {
+      this.player.player.setPosition(
+        data.spawnPosition.x,
+        data.spawnPosition.y
+      );
     }
 
-    create(data) {
-        this.setupWorld();
-        this.setupPlayer(data);
-        this.setupRocks(this.rockPositions);
-        this.setupEnemies();
-        this.setupDoors();
-    }
+    this.physics.add.collider(this.player.player, this.bordersGroup);
+  }
 
-    update() {
-        this.player.update();
-        this.doorsController();
-    }
+  setupEnemies() {
+    this.enemiesGroup = this.physics.add.group();
+    let crazyLongLegs = new CrazyLongLegs(this, 580, 235);
+    this.enemiesGroup.add(crazyLongLegs.sprite);
+    crazyLongLegs = new CrazyLongLegs(this, 1370, 235);
+    this.enemiesGroup.add(crazyLongLegs.sprite);
+    crazyLongLegs = new CrazyLongLegs(this, 575, 665);
+    this.enemiesGroup.add(crazyLongLegs.sprite);
+    crazyLongLegs = new CrazyLongLegs(this, 1370, 665);
+    this.enemiesGroup.add(crazyLongLegs.sprite);
+    this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
+    this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
+  }
 
-    setupWorld() {
-        const worldWidth = window.innerWidth;
-        const worldHeight = window.innerHeight;
+  setupRocks(positions) {
+    this.rocksGroup = this.physics.add.group({ immovable: true });
+    positions.forEach((position) => {
+      let spike = this.rocksGroup.create(position.x, position.y, 'rock');
+      spike.setImmovable(true);
+      spike.setDepth(1).setScale(1.8);
+    });
 
-        new Floor(this, worldWidth, worldHeight);
-        this.bordersGroup = this.physics.add.staticGroup();
-        new Borders(this, worldWidth, worldHeight);
-    }
+    this.physics.add.collider(this.player.player, this.rocksGroup);
+  }
 
-    setupPlayer(data) {
-        this.player = data.player;
-
-        if (
-            data.spawnPosition &&
-            data.spawnPosition.x &&
-            data.spawnPosition.y
-        ) {
-            this.player.player.setPosition(
-                data.spawnPosition.x,
-                data.spawnPosition.y
-            );
-        }
-
-        this.physics.add.collider(this.player.player, this.bordersGroup);
-    }
-
-    setupEnemies() {
-        this.enemiesGroup = this.physics.add.group();
-        let crazyLongLegs = new CrazyLongLegs(this, 580, 235);
-        this.enemiesGroup.add(crazyLongLegs.sprite);
-        crazyLongLegs = new CrazyLongLegs(this, 1370, 235);
-        this.enemiesGroup.add(crazyLongLegs.sprite);
-        crazyLongLegs = new CrazyLongLegs(this, 575, 665);
-        this.enemiesGroup.add(crazyLongLegs.sprite);
-        crazyLongLegs = new CrazyLongLegs(this, 1370, 665);
-        this.enemiesGroup.add(crazyLongLegs.sprite);
-        this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
-        this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
-    }
-
-    setupRocks(positions) {
-        this.rocksGroup = this.physics.add.group({ immovable: true });
-        positions.forEach((position) => {
-            let spike = this.rocksGroup.create(position.x, position.y, "rock");
-            spike.setImmovable(true);
-            spike.setDepth(1).setScale(1.8);
+  doorsController() {
+    if (this.enemiesGroup.children.entries.length === 0) {
+      this.physics.add.collider(this.player.player, this.leftDoor, () => {
+        this.scene.get('GameScene').changeRoom('SpawnRoom', this.scene.key, {
+          x: window.innerWidth - 498,
+          y: window.innerHeight / 2,
         });
-
-        this.physics.add.collider(this.player.player, this.rocksGroup);
+      });
+      this.physics.add.collider(this.player.player, this.rightDoor, () => {
+        this.scene
+          .get('GameScene')
+          .changeRoom('SecondRightRoom', this.scene.key, {
+            x: 530,
+            y: window.innerHeight / 2,
+          });
+      });
     }
+  }
 
-    doorsController() {
-        if (this.enemiesGroup.children.entries.length === 0) {
-            this.physics.add.collider(this.player.player, this.leftDoor, () => {
-                this.scene
-                    .get("GameScene")
-                    .changeRoom("SpawnRoom", this.scene.key, {
-                        x: window.innerWidth - 498,
-                        y: window.innerHeight / 2,
-                    });
-            });
-            this.physics.add.collider(
-                this.player.player,
-                this.rightDoor,
-                () => {
-                    this.scene
-                        .get("GameScene")
-                        .changeRoom("SecondRightRoom", this.scene.key, {
-                            x: 530,
-                            y: window.innerHeight / 2,
-                        });
-                }
-            );
-        }
-    }
+  setupDoors() {
+    this.doors = new Doors(this);
+    this.leftDoor = this.doors.createLeftDoor();
+    this.rightDoor = this.doors.createRightDoor();
+  }
 
-    setupDoors() {
-        this.doors = new Doors(this);
-        this.leftDoor = this.doors.createLeftDoor();
-        this.rightDoor = this.doors.createRightDoor();
-    }
+  handleResume() {
+    this.physics.add.collider(this.player.player, this.rocksGroup);
+  }
 }

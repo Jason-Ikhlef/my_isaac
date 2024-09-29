@@ -54,7 +54,11 @@ export default class Player {
   }
 
   changeHealth(dmg) {
-    if (dmg < 0 && !this.isInvincible) {
+    if (dmg < 0 && this.isInvincible) {
+      return;
+    }
+
+    if (dmg < 0) {
       const randomNumber = Phaser.Math.Between(1, 3);
       this.scene.sound.play(`isaac_hurt_${randomNumber}`, {
         volume: this.scene.scene.get('GameScene').sfxVolume,
@@ -204,6 +208,14 @@ export default class Player {
     this.scene.physics.add.collider(
       tear,
       this.scene.bordersGroup,
+      this.handleTearCollision.bind(this),
+      null,
+      this.scene
+    );
+
+    this.scene.physics.add.collider(
+      tear,
+      this.scene.rocksGroup,
       this.handleTearCollision.bind(this),
       null,
       this.scene

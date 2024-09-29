@@ -33,7 +33,7 @@ export default class Doors {
     this.downDoor = this.scene.add
       .sprite(
         window.innerWidth / 2 - 75,
-        window.innerHeight - 155,
+        window.innerHeight - 180,
         'basementDoor'
       )
       .setOrigin(0, 0)
