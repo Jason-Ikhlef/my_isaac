@@ -11,6 +11,7 @@ import PauseScene from './scenes/PauseScene.js';
 import FadeOverlayScene from './scenes/FadeOverlayScene.js';
 import DeathScene from './scenes/DeathScene.js';
 import OptionsScene from './scenes/OptionsScene.js';
+import BossRoom from './scenes/BossRoom.js';
 
 export const config = {
   type: Phaser.AUTO,
@@ -28,6 +29,7 @@ export const config = {
     FirstRightRoom,
     SecondRightRoom,
     ItemRoom,
+    BossRoom,
     FadeOverlayScene,
     DeathScene,
   ],
