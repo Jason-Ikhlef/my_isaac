@@ -9,6 +9,12 @@ export default class DropManager {
         { item: 'coin', dropRate: [51, 90] },
         { item: 'heart', dropRate: [91, 100] },
       ],
+      crazyLongLegs: [
+        { item: 'bomb', dropRate: [1, 30] },
+        { item: 'key', dropRate: [31, 50] },
+        { item: 'coin', dropRate: [51, 90] },
+        { item: 'heart', dropRate: [91, 100] },
+      ],
     };
   }
 
@@ -56,16 +62,18 @@ export default class DropManager {
     if (dropRate === 1) {
       const fullHeartRate = Phaser.Math.Between(1, 10);
 
-      let heartValue, spriteName;
+      let heartValue, frameIndex;
       if (fullHeartRate === 1) {
         heartValue = 2;
-        spriteName = 'red_half_heart';
+        frameIndex = 0;
       } else {
         heartValue = 1;
-        spriteName = 'red_heart';
+        frameIndex = 1;
       }
 
-      const heart = this.scene.physics.add.sprite(x, y, spriteName);
+      const heart = this.scene.physics.add
+        .sprite(x, y, 'hearts', frameIndex)
+        .setScale(2);
 
       this.scene.physics.add.overlap(heart, this.scene.player.player, () => {
         this.scene.player.changeHealth(heartValue);
@@ -74,15 +82,9 @@ export default class DropManager {
     }
   }
 
-  dropBomb(x, y) {
-    // un jour inch
-  }
+  dropBomb(x, y) {}
 
-  dropKey(x, y) {
-    // un jour inch
-  }
+  dropKey(x, y) {}
 
-  dropCoin(x, y) {
-    // un jour inch
-  }
+  dropCoin(x, y) {}
 }

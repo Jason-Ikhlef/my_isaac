@@ -40,14 +40,15 @@ export default class Player {
   }
 
   initHearts() {
-    const startX = 60;
-    const startY = 50;
-    const heartSpacing = 16;
+    const startX = 100;
+    const startY = 70;
+    const heartSpacing = 32;
 
     for (let i = 0; i < this.maxHearts; i++) {
       let heart = this.scene.add
         .image(startX + i * heartSpacing, startY, 'hearts')
-        .setFrame(0);
+        .setFrame(0)
+        .setScale(2);
       this.hearts.push(heart);
     }
   }
