@@ -19,6 +19,8 @@ export default class ItemRoom extends Phaser.Scene {
 
     this.load.image('<3', 'assets/items/<3.png');
     this.load.image('aries', 'assets/items/aries.png');
+
+    this.load.audio('itemPickup', 'sounds/sfx/item.wav');
   }
 
   create(data) {
@@ -124,7 +126,7 @@ export default class ItemRoom extends Phaser.Scene {
       this.selectedItem.texture
     );
     this.itemSprite.setScale(2);
-    
+
     this.tweens.add({
       targets: this.itemSprite,
       y: window.innerHeight / 2 - 55,
@@ -140,6 +142,7 @@ export default class ItemRoom extends Phaser.Scene {
   }
 
   collectItem(item) {
+    this.scene.scene.sound.play('itemPickup');
     item.effect(this.player);
     this.itemSprite.destroy();
   }
