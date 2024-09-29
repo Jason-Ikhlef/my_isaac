@@ -24,7 +24,13 @@ export default class DeathScene extends Phaser.Scene {
     const randomNumber = Phaser.Math.Between(1, 13);
 
     this.add.image(1170, 270, `portait${randomNumber}`).setScale(2.2);
-
     this.add.image(850, 438, 'place').setScale(2.4);
+
+    this.add.text(1080, 420, 'Git Gud', {
+      fontSize: '36px',
+      color: '#000000',
+      fontFamily: 'Arial',
+      align: 'center'
+    }).setOrigin(0.5, 0).setRotation(Phaser.Math.DegToRad(45));
   }
 }
