@@ -55,11 +55,15 @@ export default class Player {
 
   changeHealth(dmg) {
     if (dmg < 0 && !this.isInvincible) {
-      const randomNumber = Phaser.Math.Between(1, 3)
-      this.scene.sound.play(`isaac_hurt_${randomNumber}`);
+      const randomNumber = Phaser.Math.Between(1, 3);
+      this.scene.sound.play(`isaac_hurt_${randomNumber}`, {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
       this.startInvincibility();
     } else if (dmg > 0) {
-      this.scene.sound.play('isaac_heal');
+      this.scene.sound.play('isaac_heal', {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
     }
 
     this.health += dmg;
@@ -67,8 +71,10 @@ export default class Player {
 
     this.updateHearts();
     if (this.health === 0) {
-      const randomNumber = Phaser.Math.Between(1, 3)
-      this.scene.sound.play(`isaac_die_${randomNumber}`);
+      const randomNumber = Phaser.Math.Between(1, 3);
+      this.scene.sound.play(`isaac_die_${randomNumber}`, {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
       this.scene.scene.get('GameScene').onPlayerDeath();
     }
   }
@@ -177,7 +183,9 @@ export default class Player {
 
     if (currentTime - this.lastShotTime >= this.attackSpeed) {
       this.shootTear(direction);
-      this.scene.sound.play('tears_fire');
+      this.scene.sound.play('tears_fire', {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
       this.lastShotTime = currentTime;
     }
   }
@@ -230,7 +238,9 @@ export default class Player {
   }
 
   handleTearCollision(tear) {
-    this.scene.sound.play('tears_block');
+    this.scene.sound.play('tears_block', {
+      volume: this.scene.scene.get('GameScene').sfxVolume,
+    });
     tear.destroy();
   }
 

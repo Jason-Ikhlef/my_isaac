@@ -28,14 +28,29 @@ export default class Enemy {
 
     this.dropManager = new DropManager(scene);
     this.initAmbianceSound();
+    this.scene.scene
+      .get('GameScene')
+      .events.on('volumeChanged', this.updateVolume, this);
   }
 
   initAmbianceSound() {
-    if (this.scene.sound.get(`${this.name}_sound`)) {
+    this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
+    if (this.ambientSound) {
       this.ambientSound = this.scene.sound.add(`${this.name}_sound`);
       this.ambientSound.loop = true;
+      this.ambientSound.setVolume(this.scene.scene.get('GameScene').sfxVolume);
       this.ambientSound.play();
     }
+  }
+
+  setAmbientVolume(volume) {
+    if (this.ambientSound) {
+      this.ambientSound.setVolume(volume);
+    }
+  }
+
+  updateVolume(volume) {
+    this.setAmbientVolume(volume);
   }
 
   takeDamage(tear) {
@@ -66,7 +81,9 @@ export default class Enemy {
   }
 
   die() {
-    this.scene.sound.play(`${this.name}_die`);
+    this.scene.sound.play(`${this.name}_die`, {
+      volume: this.scene.scene.get('GameScene').sfxVolume,
+    });
     this.dropManager.dropMob(this.name, this.sprite.x, this.sprite.y);
     this.scene.events.off('update', this.update, this);
     this.scene.physics.world.remove(this.sprite);

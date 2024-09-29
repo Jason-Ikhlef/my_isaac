@@ -82,7 +82,9 @@ export default class Pooter extends Enemy {
   }
 
   performShoot() {
-    this.scene.sound.play('pooter_tears');
+    this.scene.sound.play('pooter_tears', {
+      volume: this.scene.scene.get('GameScene').sfxVolume,
+    });
     let tear = this.scene.physics.add.sprite(
       this.sprite.x,
       this.sprite.y + 2,
@@ -114,7 +116,10 @@ export default class Pooter extends Enemy {
   }
 
   handleTearCollision(tear) {
-    this.scene.sound.play('tears_block');
+    this.scene.sound.play('tears_block'),
+      {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      };
     tear.destroy();
   }
 }

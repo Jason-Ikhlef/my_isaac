@@ -102,6 +102,8 @@ export default class GameScene extends Phaser.Scene {
     if (this.basement_music) {
       this.basement_music.setVolume(this.musicLevel / 10);
     }
+
+    this.events.emit('volumeChanged', this.sfxVolume);
   }
 
   updateVolume(type, value) {
