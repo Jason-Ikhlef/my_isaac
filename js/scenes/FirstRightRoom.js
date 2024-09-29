@@ -8,6 +8,9 @@ export default class FirstRightRoom extends Phaser.Scene {
   constructor() {
     super('FirstRightRoom');
 
+    this.doorsOpen = false;
+    this.firstEntrance = true;
+
     let midWitdh = window.innerWidth / 2;
     let midHeight = window.innerHeight / 2;
     this.rockPositions = [
@@ -102,6 +105,30 @@ export default class FirstRightRoom extends Phaser.Scene {
             y: window.innerHeight / 2,
           });
       });
+    }
+
+    if (!this.doorsOpen) {
+      this.updateDoorAppearance();
+    } 
+    
+    if (this.firstEntrance && this.enemiesGroup.children.entries.length > 0) {
+      this.scene.get('GameScene').sound.play('doorClose');
+      this.firstEntrance = false;
+    }
+  }
+
+  updateDoorAppearance() {
+    const hasEnemies =
+      this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
+
+    this.rightDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
+    this.leftDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
+
+    if (!hasEnemies) {
+      this.rightDoor.setRotation(0);
+      this.leftDoor.setRotation(Phaser.Math.DegToRad(-180));
+      this.scene.get('GameScene').sound.play('doorOpen');
+      this.doorsOpen = true;
     }
   }
 

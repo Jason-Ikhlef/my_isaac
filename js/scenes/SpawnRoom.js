@@ -5,13 +5,16 @@ import Borders from '../borders.js';
 export default class SpawnRoom extends Phaser.Scene {
   constructor() {
     super('SpawnRoom');
+
+    this.doorsOpen = false;
+    this.firstEntrance = true;
   }
 
   create(data) {
     this.setupWorld();
     this.setupPlayer(data);
     // this.setupSpikes(this.spikePositions);
-    // this.setupEnemies();
+    this.setupEnemies();
     this.setupDoors();
 
     this.add
@@ -25,7 +28,6 @@ export default class SpawnRoom extends Phaser.Scene {
   }
 
   update() {
-    this.player.update();
     this.doorsController();
   }
 
@@ -58,64 +60,55 @@ export default class SpawnRoom extends Phaser.Scene {
   }
 
   doorsController() {
-    this.physics.add.collider(this.player.player, this.upDoor, () => {
-      this.scene.get('GameScene').changeRoom('FirstTopRoom', this.scene.key, {
-        x: window.innerWidth / 2,
-        y: window.innerHeight - 210,
+    if (this.enemiesGroup.children.entries.length === 0) {
+      this.physics.add.collider(this.player.player, this.upDoor, () => {
+        this.scene.get('GameScene').changeRoom('FirstTopRoom', this.scene.key, {
+          x: window.innerWidth / 2,
+          y: window.innerHeight - 210,
+        });
       });
-    });
-    this.physics.add.collider(this.player.player, this.rightDoor, () => {
-      this.scene.get('GameScene').changeRoom('FirstRightRoom', this.scene.key, {
-        x: 530,
-        y: window.innerHeight / 2,
+      this.physics.add.collider(this.player.player, this.rightDoor, () => {
+        this.scene
+          .get('GameScene')
+          .changeRoom('FirstRightRoom', this.scene.key, {
+            x: 530,
+            y: window.innerHeight / 2,
+          });
       });
-    });
+    }
+
+    if (!this.doorsOpen) {
+      this.updateDoorAppearance();
+    }
+
+    if (this.firstEntrance && this.enemiesGroup) {
+      this.scene.get('GameScene').sound.play('doorClose');
+      this.firstEntrance = false;
+    }
+  }
+
+  updateDoorAppearance() {
+    const hasEnemies =
+      this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
+
+    this.upDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
+
+    this.rightDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
+
+    if (!hasEnemies) {
+      this.rightDoor.setRotation(0);
+      this.scene.get('GameScene').sound.play('doorOpen');
+      this.doorsOpen = true;
+    }
   }
 
   setupEnemies() {
     this.enemiesGroup = this.physics.add.group();
-    let crazyLongLegs = new CrazyLongLegs(
-      this,
-      window.innerWidth / 2 + 100,
-      window.innerHeight / 2
-    );
-    this.enemiesGroup.add(crazyLongLegs.sprite);
-    crazyLongLegs = new CrazyLongLegs(
-      this,
-      window.innerWidth / 2 - 100,
-      window.innerHeight / 2
-    );
-    this.enemiesGroup.add(crazyLongLegs.sprite);
-    this.physics.add.collider(this.enemiesGroup, this.bordersGroup);
-    this.physics.add.collider(this.enemiesGroup, this.rocksGroup);
   }
 
-  setupSpikes(positions) {
-    this.spikesGroup = this.physics.add.group({ immovable: true });
-    positions.forEach((position) => {
-      let spike = this.spikesGroup.create(position.x, position.y, 'spikes');
-      spike.setImmovable(true);
-      spike.setDepth(1).setScale(1.8);
-    });
+  setupSpikes(positions) {}
 
-    this.physics.add.overlap(this.player.player, this.spikesGroup, () => {
-      if (!this.player.isInvincible) {
-        this.player.changeHealth(-1);
-        this.player.startInvincibility();
-      }
-    });
-  }
-
-  setupRocks(positions) {
-    this.rocksGroup = this.physics.add.group({ immovable: true });
-    positions.forEach((position) => {
-      let spike = this.rocksGroup.create(position.x, position.y, 'rock');
-      spike.setImmovable(true);
-      spike.setDepth(1).setScale(1.8);
-    });
-
-    this.physics.add.collider(this.player.player, this.rocksGroup);
-  }
+  setupRocks(positions) {}
 
   handleResume() {}
 }

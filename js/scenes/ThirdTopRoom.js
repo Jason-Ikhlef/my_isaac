@@ -7,6 +7,9 @@ export default class ThirdTopRoom extends Phaser.Scene {
   constructor() {
     super('ThirdTopRoom');
 
+    this.doorsOpen = false;
+    this.firstEntrance = true;
+
     this.spikePositions = [
       { x: 565, y: 235 },
       { x: 1380, y: 235 },
@@ -70,6 +73,7 @@ export default class ThirdTopRoom extends Phaser.Scene {
     let pooter = new Pooter(this, 500, 300);
     this.enemiesGroup.add(pooter.sprite);
   }
+  
   doorsController() {
     if (this.enemiesGroup.children.entries.length === 0) {
       this.physics.add.collider(this.player.player, this.downDoor, () => {
@@ -86,6 +90,28 @@ export default class ThirdTopRoom extends Phaser.Scene {
           y: window.innerHeight - 210,
         });
       });
+    }
+
+    if (!this.doorsOpen) {
+      this.updateDoorAppearance();
+    } 
+    
+    if (this.firstEntrance && this.enemiesGroup.children.entries.length > 0) {
+      this.scene.get('GameScene').sound.play('doorClose');
+      this.firstEntrance = false;
+    }
+  }
+
+  updateDoorAppearance() {
+    const hasEnemies =
+      this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
+
+    this.downDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
+    this.upDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
+
+    if (!hasEnemies) {
+      this.scene.get('GameScene').sound.play('doorOpen');
+      this.doorsOpen = true;
     }
   }
 
