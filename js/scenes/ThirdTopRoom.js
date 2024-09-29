@@ -2,6 +2,7 @@ import Pooter from '../pooter.js';
 import Doors from '../doors.js';
 import Floor from '../floor.js';
 import Borders from '../borders.js';
+import CrazyLongLegs from '../crazyLongLegs.js';
 
 export default class ThirdTopRoom extends Phaser.Scene {
   constructor() {
@@ -70,10 +71,22 @@ export default class ThirdTopRoom extends Phaser.Scene {
 
   setupEnemies() {
     this.enemiesGroup = this.physics.add.group();
-    let pooter = new Pooter(this, 500, 300);
+    let pooter = new Pooter(this, 565, 235);
     this.enemiesGroup.add(pooter.sprite);
+    pooter = new Pooter(this, 1380, 235);
+    this.enemiesGroup.add(pooter.sprite);
+    pooter = new Pooter(this, 565, 665);
+    this.enemiesGroup.add(pooter.sprite);
+    pooter = new Pooter(this, 1280, 665);
+    this.enemiesGroup.add(pooter.sprite);
+    let crazyLongLegs = new CrazyLongLegs(
+      this,
+      window.innerWidth / 2,
+      window.innerHeight / 2
+    );
+    this.enemiesGroup.add(crazyLongLegs.sprite);
   }
-  
+
   doorsController() {
     if (this.enemiesGroup.children.entries.length === 0) {
       this.physics.add.collider(this.player.player, this.downDoor, () => {
@@ -94,8 +107,8 @@ export default class ThirdTopRoom extends Phaser.Scene {
 
     if (!this.doorsOpen) {
       this.updateDoorAppearance();
-    } 
-    
+    }
+
     if (this.firstEntrance && this.enemiesGroup.children.entries.length > 0) {
       this.scene.get('GameScene').sound.play('doorClose');
       this.firstEntrance = false;

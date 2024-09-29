@@ -57,6 +57,7 @@ export default class SpawnRoom extends Phaser.Scene {
     this.doors = new Doors(this);
     this.upDoor = this.doors.createUpDoor();
     this.rightDoor = this.doors.createRightDoor();
+    this.leftDoor = this.doors.createLeftDoor();
   }
 
   doorsController() {
@@ -70,10 +71,16 @@ export default class SpawnRoom extends Phaser.Scene {
       this.physics.add.collider(this.player.player, this.rightDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('FirstRightRoom', this.scene.key, {
+          .changeRoom('FirstRightDoor', this.scene.key, {
             x: 530,
             y: window.innerHeight / 2,
           });
+      });
+      this.physics.add.collider(this.player.player, this.leftDoor, () => {
+        this.scene.get('GameScene').changeRoom('ItemRoom', this.scene.key, {
+          x: window.innerWidth - 498,
+          y: window.innerHeight / 2,
+        });
       });
     }
 
@@ -94,9 +101,11 @@ export default class SpawnRoom extends Phaser.Scene {
     this.upDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
 
     this.rightDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
+    this.leftDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
 
     if (!hasEnemies) {
       this.rightDoor.setRotation(0);
+      this.leftDoor.setRotation(Phaser.Math.DegToRad(-180));
       this.scene.get('GameScene').sound.play('doorOpen');
       this.doorsOpen = true;
     }

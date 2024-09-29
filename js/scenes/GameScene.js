@@ -63,6 +63,8 @@ export default class GameScene extends Phaser.Scene {
     this.load.audio('isaac_heal', 'sounds/sfx/isaac_heal.wav');
     this.load.audio('basement_music', 'sounds/musics/dipteraSonata.ogg');
     this.load.image('tears', 'assets/characters/tears.png');
+    this.load.image('homing_tears', 'assets/characters/homing_tears.png');
+    this.load.image('nails_tears', 'assets/characters/nails_tears.png');
     this.load.audio('tears_fire', 'sounds/sfx/tears.wav');
     this.load.audio('tears_block', 'sounds/sfx/tear_block.wav');
 

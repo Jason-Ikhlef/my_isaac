@@ -25,10 +25,14 @@ export default class Player {
     this.isInvincible = false;
     this.invincibilityDuration = 1000;
     this.attackSpeed = 400;
+    this.tearSpeed = 300;
     this.lastShotTime = 0;
     this.lastDirection = 'down';
     this.damage = 3;
     this.knockback = 50;
+    this.movementSpeed = 160;
+    this.hasHoming = false;
+    this.hasNails = false;
 
     this.initHearts();
 
@@ -43,6 +47,7 @@ export default class Player {
     const startX = 100;
     const startY = 70;
     const heartSpacing = 32;
+    this.hearts = [];
 
     for (let i = 0; i < this.maxHearts; i++) {
       let heart = this.scene.add
@@ -109,7 +114,7 @@ export default class Player {
   update() {
     if (this.health === 0) return;
 
-    const speed = 160;
+    const speed = this.movementSpeed;
     let velocityX = 0;
     let velocityY = 0;
 
@@ -195,13 +200,23 @@ export default class Player {
   }
 
   shootTear(direction) {
-    let tearSpeed = 300;
+    let texture = 'tears';
+    let scale = 0.7;
+
+    if (this.hasHoming) {
+      texture = 'homing_tears';
+      scale = 2;
+    } else if (this.hasNails) {
+      texture = 'nails_tears';
+      scale = 2;
+    }
+
     let tear = this.scene.physics.add.sprite(
       this.player.x,
       this.player.y,
-      'tears'
+      texture
     );
-    tear.setScale(0.7);
+    tear.setScale(scale);
     tear.damage = this.damage;
     tear.knockback = this.knockback;
 
@@ -235,18 +250,71 @@ export default class Player {
 
     switch (direction) {
       case 'left':
-        tear.setVelocityX(-tearSpeed);
+        tear.setVelocityX(-this.tearSpeed);
+        tear.setRotation(Phaser.Math.DegToRad(180));
         break;
       case 'right':
-        tear.setVelocityX(tearSpeed);
+        tear.setVelocityX(this.tearSpeed);
         break;
       case 'up':
-        tear.setVelocityY(-tearSpeed);
+        tear.setVelocityY(-this.tearSpeed);
+        tear.setRotation(Phaser.Math.DegToRad(-90));
         break;
       case 'down':
-        tear.setVelocityY(tearSpeed);
+        tear.setVelocityY(this.tearSpeed);
+        tear.setRotation(Phaser.Math.DegToRad(90));
         break;
     }
+
+    // if (this.hasHoming) {
+    //   this.applyHomingEffect(tear);
+    // }
+  }
+
+  applyHomingEffect(tear) {
+    const enemies = this.scene.enemiesGroup.getChildren();
+    if (enemies.length === 0) return;
+
+    let closestEnemy = null;
+    let closestDistance = 999999999;
+
+    enemies.forEach((enemy) => {
+      const distance = this.distanceBetween(tear, enemy);
+      if (distance < closestDistance) {
+        closestEnemy = enemy;
+        closestDistance = distance;
+      }
+    });
+
+    if (closestEnemy) {
+      this.scene.time.addEvent({
+        delay: 50,
+        callback: () => {
+          if (!tear) return;
+          const angle = Phaser.Math.Angle.Between(
+            tear.x,
+            tear.y,
+            closestEnemy.x,
+            closestEnemy.y
+          );
+
+          console.log(tear);
+
+          tear.setVelocity(
+            this.tearSpeed * 0.9 + Math.cos(angle) * 30,
+            this.tearSpeed * 0.9 + Math.sin(angle) * 30
+          );
+        },
+        callbackScope: this,
+        loop: true,
+      });
+    }
+  }
+
+  distanceBetween(player, enemy) {
+    const dx = player.x - enemy.x;
+    const dy = player.y - enemy.y;
+    return Math.sqrt(dx * dx + dy * dy);
   }
 
   handleTearCollision(tear) {
