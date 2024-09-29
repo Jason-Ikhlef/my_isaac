@@ -16,10 +16,9 @@ export default class ItemRoom extends Phaser.Scene {
         this.setupDoors();
     }
 
-    update() {
-        this.player.update();
-        this.doorsController();
-    }
+  update() {
+    this.doorsController();
+  }
 
     setupWorld() {
         const worldWidth = window.innerWidth;

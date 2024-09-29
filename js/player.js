@@ -40,30 +40,43 @@ export default class Player {
   }
 
   initHearts() {
-    const startX = 60;
-    const startY = 50;
-    const heartSpacing = 16;
+    const startX = 100;
+    const startY = 70;
+    const heartSpacing = 32;
 
     for (let i = 0; i < this.maxHearts; i++) {
       let heart = this.scene.add
         .image(startX + i * heartSpacing, startY, 'hearts')
-        .setFrame(0);
+        .setFrame(0)
+        .setScale(2);
       this.hearts.push(heart);
     }
   }
 
   changeHealth(dmg) {
     if (dmg < 0 && !this.isInvincible) {
-      this.scene.sound.play('isaac_hurt');
+      const randomNumber = Phaser.Math.Between(1, 3);
+      this.scene.sound.play(`isaac_hurt_${randomNumber}`, {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
       this.startInvincibility();
     } else if (dmg > 0) {
-      this.scene.sound.play('isaac_heal');
+      this.scene.sound.play('isaac_heal', {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
     }
 
     this.health += dmg;
     this.health = Phaser.Math.Clamp(this.health, 0, this.maxHearts * 2);
 
     this.updateHearts();
+    if (this.health === 0) {
+      const randomNumber = Phaser.Math.Between(1, 3);
+      this.scene.sound.play(`isaac_die_${randomNumber}`, {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
+      this.scene.scene.get('GameScene').onPlayerDeath();
+    }
   }
 
   updateHearts() {
@@ -90,6 +103,8 @@ export default class Player {
   }
 
   update() {
+    if (this.health === 0) return;
+
     const speed = 160;
     let velocityX = 0;
     let velocityY = 0;
@@ -168,7 +183,9 @@ export default class Player {
 
     if (currentTime - this.lastShotTime >= this.attackSpeed) {
       this.shootTear(direction);
-      this.scene.sound.play('tears_fire');
+      this.scene.sound.play('tears_fire', {
+        volume: this.scene.scene.get('GameScene').sfxVolume,
+      });
       this.lastShotTime = currentTime;
     }
   }
@@ -221,7 +238,9 @@ export default class Player {
   }
 
   handleTearCollision(tear) {
-    this.scene.sound.play('tears_block');
+    this.scene.sound.play('tears_block', {
+      volume: this.scene.scene.get('GameScene').sfxVolume,
+    });
     tear.destroy();
   }
 

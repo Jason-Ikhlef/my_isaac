@@ -43,7 +43,6 @@ export default class SecondRightRoom extends Phaser.Scene {
     }
 
     update() {
-        this.player.update();
         this.doorsController();
     }
 

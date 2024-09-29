@@ -92,6 +92,7 @@ export default class CrazyLongLegs extends Enemy {
         this.isAttacking = true;
         this.sprite.body.setVelocity(0, 0);
 
+        this.shootInAllDirections();
         this.shootAtPlayer();
         this.lastShotTime = this.scene.time.now;
 
@@ -107,7 +108,9 @@ export default class CrazyLongLegs extends Enemy {
     }
 
     shootInAllDirections() {
-        this.scene.sound.play("crazyLongLegs_tears");
+        this.scene.sound.play('crazyLongLegs_tears', {
+            volume: this.scene.scene.get('GameScene').sfxVolume,
+        });
 
         const numProjectiles = 8;
         const angleStep = (2 * Math.PI) / numProjectiles;
@@ -146,7 +149,9 @@ export default class CrazyLongLegs extends Enemy {
     }
 
     handleTearCollision(tear) {
-        this.scene.sound.play("tears_block");
+        this.scene.sound.play('tears_block', {
+            volume: this.scene.scene.get('GameScene').sfxVolume,
+        });
         tear.destroy();
     }
 }

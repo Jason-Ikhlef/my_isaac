@@ -23,10 +23,9 @@ export default class ThirdTopRoom extends Phaser.Scene {
         this.setupDoors();
     }
 
-    update() {
-        this.player.update();
-        this.doorsController();
-    }
+  update() {
+    this.doorsController();
+  }
 
     setupWorld() {
         const worldWidth = window.innerWidth;
@@ -79,7 +78,6 @@ export default class ThirdTopRoom extends Phaser.Scene {
         let pooter = new Pooter(this, 500, 300);
         this.enemiesGroup.add(pooter.sprite);
     }
-
     doorsController() {
         if (this.enemiesGroup.children.entries.length === 0) {
             this.physics.add.collider(this.player.player, this.downDoor, () => {

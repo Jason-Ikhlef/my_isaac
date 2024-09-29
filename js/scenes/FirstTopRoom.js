@@ -7,6 +7,13 @@ export default class FirstTopRoom extends Phaser.Scene {
     constructor() {
         super("FirstTopRoom");
 
+        this.spikePositions = [
+            { x: 565, y: 235 },
+            { x: 1380, y: 235 },
+            { x: 565, y: 665 },
+            { x: 1380, y: 665 },
+        ];
+
         this.rockPositions = [
             { x: 625, y: 235 },
             { x: 580, y: 285 },
@@ -22,6 +29,7 @@ export default class FirstTopRoom extends Phaser.Scene {
     create(data) {
         this.setupWorld();
         this.setupPlayer(data);
+        this.setupSpikes(this.spikePositions);
         this.setupRocks(this.rockPositions);
         this.setupEnemies();
         this.setupDoors();
@@ -44,11 +52,7 @@ export default class FirstTopRoom extends Phaser.Scene {
     setupPlayer(data) {
         this.player = data.player;
 
-        if (
-            data.spawnPosition &&
-            data.spawnPosition.x &&
-            data.spawnPosition.y
-        ) {
+        if (data.spawnPosition && data.spawnPosition.x && data.spawnPosition.y) {
             this.player.player.setPosition(
                 data.spawnPosition.x,
                 data.spawnPosition.y
@@ -76,6 +80,17 @@ export default class FirstTopRoom extends Phaser.Scene {
                 this.player.startInvincibility();
             }
         });
+    }
+
+    setupRocks(positions) {
+        this.rocksGroup = this.physics.add.group({ immovable: true });
+        positions.forEach((position) => {
+            let rock = this.rocksGroup.create(position.x, position.y, "rock");
+            rock.setImmovable(true);
+            rock.setDepth(1).setScale(1.8);
+        });
+
+        this.physics.add.collider(this.player.player, this.rocksGroup);
     }
 
     setupEnemies() {
@@ -117,16 +132,5 @@ export default class FirstTopRoom extends Phaser.Scene {
         this.doors = new Doors(this);
         this.upDoor = this.doors.createUpDoor();
         this.downDoor = this.doors.createDownDoor();
-    }
-
-    setupRocks(positions) {
-        this.rocksGroup = this.physics.add.group({ immovable: true });
-        positions.forEach((position) => {
-            let spike = this.rocksGroup.create(position.x, position.y, "rock");
-            spike.setImmovable(true);
-            spike.setDepth(1).setScale(1.8);
-        });
-
-        this.physics.add.collider(this.player.player, this.rocksGroup);
     }
 }
