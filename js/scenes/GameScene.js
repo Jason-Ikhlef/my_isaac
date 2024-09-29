@@ -11,6 +11,7 @@ export default class GameScene extends Phaser.Scene {
     this.musicVolume = this.musicLevel / 10;
     this.sfxLevel = localStorage.getItem('sfxLevel') !== null ? parseInt(localStorage.getItem('sfxLevel')) : 5;
     this.sfxVolume = this.sfxLevel / 10;
+    this.isOnOptionMenu = false;
   }
 
   preload() {
@@ -185,7 +186,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   togglePause(restart = false) {
-    if (this.currentRoom === 'DeathScene') return;
+    if (this.currentRoom === 'DeathScene' || this.isOnOptionMenu) return;
     if (!this.isPause && !restart) {
       this.scene.pause(this.currentRoom);
       this.scene.launch('PauseScene');

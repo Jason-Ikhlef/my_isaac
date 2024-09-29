@@ -73,11 +73,10 @@ export default class OptionsScene extends Phaser.Scene {
       .setInteractive({ useHandCursor: true });
 
     backBtn.on('pointerdown', () => {
-      this.scene.stop();
-      this.scene.resume('PauseScene');
-      this.scene.bringToTop('PauseScene');
-      this.scene.bringToTop('FadeOverlayScene');
+      this.backToPauseMenu();
     });
+
+    this.input.keyboard.on('keydown-ESC', () => this.backToPauseMenu(), this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -119,13 +118,22 @@ export default class OptionsScene extends Phaser.Scene {
     if (this.selectedOption === 1) {
       this.musicLevel = Phaser.Math.Clamp(this.musicLevel + direction, 0, 10);
       this.musicLevelImg.setTexture(`music${this.musicLevel}`);
-      
+
       gameScene.updateVolume('music', this.musicLevel);
     } else if (this.selectedOption === 2) {
       this.sfxLevel = Phaser.Math.Clamp(this.sfxLevel + direction, 0, 10);
       this.sfxLevelImg.setTexture(`sfx${this.sfxLevel}`);
-      
+
       gameScene.updateVolume('sfx', this.sfxLevel);
     }
+  }
+
+  backToPauseMenu() {
+    this.scene.stop('OptionsScene');
+    this.scene.resume('PauseScene');
+    this.scene.get('PauseScene').scene.setVisible(true);
+    this.scene.get('GameScene').isOnOptionMenu = false;
+    this.scene.bringToTop('PauseScene');
+    this.scene.bringToTop('FadeOverlayScene');
   }
 }

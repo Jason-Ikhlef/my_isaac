@@ -38,6 +38,7 @@ export default class PauseScene extends Phaser.Scene {
     optionBtn.on('pointerdown', () => {
       this.scene.pause();
       this.scene.setVisible(false);
+      this.scene.get('GameScene').isOnOptionMenu = true;
       this.scene.launch('OptionsScene');
       this.scene.bringToTop('OptionsScene');
       this.scene.bringToTop('FadeOverlayScene');
