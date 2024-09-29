@@ -31,11 +31,14 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 50,
       frameHeight: 33,
     });
-
     this.load.spritesheet('hearts', 'assets/characters/hearts.png', {
       frameWidth: 16,
       frameHeight: 16,
     });
+    this.load.image('upAndDownDoor', 'assets/floors/upAndDownDoor.png');
+    this.load.image('rightAndLeftDoor', 'assets/floors/rightAndLeftDoor.png');
+    this.load.audio('doorClose', 'sounds/sfx/door_close.wav');
+    this.load.audio('doorOpen', 'sounds/sfx/door_open.wav');
 
     this.load.image('spikes', 'assets/floors/spikes.png');
     this.load.image('rock', 'assets/floors/rock.png');

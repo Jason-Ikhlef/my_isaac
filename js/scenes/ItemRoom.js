@@ -6,6 +6,9 @@ export default class ItemRoom extends Phaser.Scene {
   constructor() {
     super('ItemRoom');
     this.spikePositions = null;
+
+    this.doorsOpen = false;
+    this.firstEntrance = true;
   }
 
   create(data) {
@@ -44,7 +47,9 @@ export default class ItemRoom extends Phaser.Scene {
 
   setupSpikes() {}
 
-  setupEnemies() {}
+  setupEnemies() {
+    this.enemiesGroup = this.physics.add.group();
+  }
 
   doorsController() {
     this.physics.add.collider(this.player.player, this.leftDoor, () => {
@@ -55,6 +60,27 @@ export default class ItemRoom extends Phaser.Scene {
           y: window.innerHeight / 2,
         });
     });
+    if (!this.doorsOpen) {
+      this.updateDoorAppearance();
+    } 
+    
+    if (this.firstEntrance && this.enemiesGroup.children.entries.length > 0) {
+      this.scene.get('GameScene').sound.play('doorClose');
+      this.firstEntrance = false;
+    }
+  }
+
+  updateDoorAppearance() {
+    const hasEnemies =
+      this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
+
+    this.leftDoor.setTexture(hasEnemies ? 'basementDoor' : 'rightAndLeftDoor');
+
+    if (!hasEnemies) {
+      this.leftDoor.setRotation(Phaser.Math.DegToRad(-180));
+      this.scene.get('GameScene').sound.play('doorOpen');
+      this.doorsOpen = true;
+    }
   }
 
   setupDoors() {

@@ -7,6 +7,9 @@ export default class SecondTopRoom extends Phaser.Scene {
   constructor() {
     super('SecondTopRoom');
 
+    this.doorsOpen = false;
+    this.firstEntrance = true;
+
     let midWidth = window.innerWidth / 2;
     let midHeight = window.innerHeight / 2;
     this.spikePositions = [
@@ -115,6 +118,28 @@ export default class SecondTopRoom extends Phaser.Scene {
           y: window.innerHeight - 210,
         });
       });
+    }
+
+    if (!this.doorsOpen) {
+      this.updateDoorAppearance();
+    } 
+    
+    if (this.firstEntrance && this.enemiesGroup.children.entries.length > 0) {
+      this.scene.get('GameScene').sound.play('doorClose');
+      this.firstEntrance = false;
+    }
+  }
+
+  updateDoorAppearance() {
+    const hasEnemies =
+      this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
+
+    this.downDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
+    this.upDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
+
+    if (!hasEnemies) {
+      this.scene.get('GameScene').sound.play('doorOpen');
+      this.doorsOpen = true;
     }
   }
 

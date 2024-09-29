@@ -7,6 +7,9 @@ export default class BossRoom extends Phaser.Scene {
   constructor() {
     super('BossRoom');
 
+    this.doorsOpen = false;
+    this.firstEntrance = true;
+
     let midWidth = window.innerWidth / 2;
     let midHeight = window.innerHeight / 2;
     this.rockPositions = [
@@ -63,7 +66,7 @@ export default class BossRoom extends Phaser.Scene {
     this.setupWorld();
     this.setupPlayer(data);
     this.setupRocks(this.rockPositions);
-    // this.setupEnemies();
+    this.setupEnemies();
     this.setupDoors();
   }
 
@@ -104,17 +107,41 @@ export default class BossRoom extends Phaser.Scene {
     this.physics.add.collider(this.player.player, this.rocksGroup);
   }
 
-  setupEnemies() {}
+  setupEnemies() {
+    this.enemiesGroup = this.physics.add.group();
+  }
 
   doorsController() {
-    // if (this.enemiesGroup.children.entries.length === 0) {
+    if (this.enemiesGroup.children.entries.length === 0) {
     this.physics.add.collider(this.player.player, this.downDoor, () => {
       this.scene.get('GameScene').changeRoom('ThirdTopRoom', this.scene.key, {
         x: window.innerWidth / 2,
         y: window.innerHeight - 750,
       });
     });
-    // }
+    }
+
+    if (!this.doorsOpen) {
+      this.updateDoorAppearance();
+    }
+    
+    if (this.firstEntrance && this.enemiesGroup) {
+      this.scene.get('GameScene').sound.play('doorClose');
+      this.firstEntrance = false;
+    }
+  }
+
+  updateDoorAppearance() {
+    const hasEnemies =
+      this.enemiesGroup && this.enemiesGroup.children.entries.length > 0;
+
+    this.downDoor.setTexture(hasEnemies ? 'basementDoor' : 'upAndDownDoor');
+
+    if (!hasEnemies) {
+      this.downDoor.setFlipY(true);
+      this.scene.get('GameScene').sound.play('doorOpen');
+      this.doorsOpen = true;
+    }
   }
 
   setupDoors() {
