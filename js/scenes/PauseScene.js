@@ -26,10 +26,23 @@ export default class PauseScene extends Phaser.Scene {
       .setOrigin(0)
       .setInteractive({ useHandCursor: true });
 
+    let optionBtn = this.add
+      .zone(window.innerWidth / 2 - 170, window.innerHeight / 2 + 30, 340, 60)
+      .setOrigin(0)
+      .setInteractive({ useHandCursor: true });
+
     resumeBtn.on('pointerdown', () => {
       this.scene.get('GameScene').togglePause(true);
     });
 
+    optionBtn.on('pointerdown', () => {
+      this.scene.pause();
+      this.scene.setVisible(false);
+      this.scene.launch('OptionsScene');
+      this.scene.bringToTop('OptionsScene');
+      this.scene.bringToTop('FadeOverlayScene');
+    });
+    
     exitBtn.on('pointerdown', () => {
       // methode de secours
       location.reload();

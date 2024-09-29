@@ -32,9 +32,11 @@ export default class TitleScene extends Phaser.Scene {
       return;
     }
 
-    const title_music = this.sound.add('title_music');
-    title_music.loop = true;
-    title_music.play({ volume: 0.1 });
+    const musicLevel = parseInt(localStorage.getItem('musicLevel')) || 5;
+    const musicVolume = musicLevel / 10;
+  
+    const title_music = this.sound.add('title_music', { loop: true, volume: musicVolume });
+    title_music.play();
 
     let main = this.add.image(
       this.cameras.main.width / 2,

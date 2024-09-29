@@ -7,6 +7,10 @@ export default class GameScene extends Phaser.Scene {
     this.scenesStatus = {};
     this.currentRoom = 'SpawnRoom';
     this.isPause = false;
+    this.musicLevel = localStorage.getItem('musicLevel') !== null ? parseInt(localStorage.getItem('musicLevel')) : 5;
+    this.musicVolume = this.musicLevel / 10;
+    this.sfxLevel = localStorage.getItem('sfxLevel') !== null ? parseInt(localStorage.getItem('sfxLevel')) : 5;
+    this.sfxVolume = this.sfxLevel / 10;
   }
 
   preload() {
@@ -72,14 +76,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const basement_music = this.sound.add('basement_music', {
+    this.basement_music = this.sound.add('basement_music', {
       loop: true,
-      volume: 0.1,
+      volume: this.musicVolume,
     });
-    basement_music.play();
+    this.basement_music.play();
 
     this.player = new Player(this);
 
+    this.applyVolumes();
     this.changeRoom('SpawnRoom');
     createAnimations(this);
 
@@ -91,6 +96,26 @@ export default class GameScene extends Phaser.Scene {
     this.rKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     this.isHoldingR = false;
     this.holdTime = 0;
+  }
+
+  applyVolumes() {
+    if (this.basement_music) {
+      this.basement_music.setVolume(this.musicLevel / 10);
+    }
+  }
+
+  updateVolume(type, value) {
+    if (type === 'music') {
+      this.musicLevel = value;
+      this.musicVolume = value / 10;
+      localStorage.setItem('musicLevel', value);
+    } else if (type === 'sfx') {
+      this.sfxLevel = value;
+      this.sfxVolume = value / 10;
+      localStorage.setItem('sfxLevel', value);
+    }
+
+    this.applyVolumes();
   }
 
   changeRoom(

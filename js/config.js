@@ -10,6 +10,7 @@ import GameScene from './scenes/GameScene.js';
 import PauseScene from './scenes/PauseScene.js';
 import FadeOverlayScene from './scenes/FadeOverlayScene.js';
 import DeathScene from './scenes/DeathScene.js';
+import OptionsScene from './scenes/OptionsScene.js';
 
 export const config = {
   type: Phaser.AUTO,
@@ -19,6 +20,7 @@ export const config = {
     TitleScene,
     GameScene,
     PauseScene,
+    OptionsScene,
     SpawnRoom,
     FirstTopRoom,
     SecondTopRoom,
