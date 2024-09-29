@@ -29,6 +29,7 @@ export default class Player {
     this.lastDirection = 'down';
     this.damage = 3;
     this.knockback = 50;
+    this.movementSpeed = 160;
 
     this.initHearts();
 
@@ -43,6 +44,7 @@ export default class Player {
     const startX = 100;
     const startY = 70;
     const heartSpacing = 32;
+    this.hearts = [];
 
     for (let i = 0; i < this.maxHearts; i++) {
       let heart = this.scene.add
@@ -109,7 +111,7 @@ export default class Player {
   update() {
     if (this.health === 0) return;
 
-    const speed = 160;
+    const speed = this.movementSpeed;
     let velocityX = 0;
     let velocityY = 0;
 

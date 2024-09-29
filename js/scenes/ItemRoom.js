@@ -1,6 +1,7 @@
 import Doors from '../doors.js';
 import Floor from '../floor.js';
 import Borders from '../borders.js';
+import items from '../items.js';
 
 export default class ItemRoom extends Phaser.Scene {
   constructor() {
@@ -9,6 +10,15 @@ export default class ItemRoom extends Phaser.Scene {
 
     this.doorsOpen = false;
     this.firstEntrance = true;
+
+    this.selectedItem = null;
+  }
+
+  preload() {
+    this.load.image('altair', 'assets/items/altair.png');
+
+    this.load.image('<3', 'assets/items/<3.png');
+    this.load.image('aries', 'assets/items/aries.png');
   }
 
   create(data) {
@@ -17,6 +27,7 @@ export default class ItemRoom extends Phaser.Scene {
     this.setupSpikes(this.spikePositions);
     this.setupEnemies();
     this.setupDoors();
+    this.setupItems();
   }
 
   update() {
@@ -62,8 +73,8 @@ export default class ItemRoom extends Phaser.Scene {
     });
     if (!this.doorsOpen) {
       this.updateDoorAppearance();
-    } 
-    
+    }
+
     if (this.firstEntrance && this.enemiesGroup.children.entries.length > 0) {
       this.scene.get('GameScene').sound.play('doorClose');
       this.firstEntrance = false;
@@ -86,5 +97,50 @@ export default class ItemRoom extends Phaser.Scene {
   setupDoors() {
     this.doors = new Doors(this);
     this.leftDoor = this.doors.createLeftDoor();
+  }
+
+  handleResume() {
+    this.physics.add.overlap(this.player.player, this.itemSprite, () => {
+      this.collectItem(this.selectedItem);
+    });
+  }
+
+  setupItems() {
+    const randomIndex = Phaser.Math.Between(0, items.length - 1);
+    this.selectedItem = items[randomIndex];
+
+    this.add
+      .image(
+        this.cameras.main.width / 2,
+        this.cameras.main.height / 2,
+        'altair'
+      )
+      .setOrigin(0.5)
+      .setScale(2.5);
+
+    this.itemSprite = this.physics.add.sprite(
+      window.innerWidth / 2,
+      window.innerHeight / 2 - 50,
+      this.selectedItem.texture
+    );
+    this.itemSprite.setScale(2);
+    
+    this.tweens.add({
+      targets: this.itemSprite,
+      y: window.innerHeight / 2 - 55,
+      ease: 'Sine.easeInOut',
+      duration: 2000,
+      yoyo: true,
+      repeat: -1,
+    });
+
+    this.physics.add.overlap(this.player.player, this.itemSprite, () => {
+      this.collectItem(this.selectedItem);
+    });
+  }
+
+  collectItem(item) {
+    item.effect(this.player);
+    this.itemSprite.destroy();
   }
 }

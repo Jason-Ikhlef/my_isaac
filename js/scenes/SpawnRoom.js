@@ -70,7 +70,7 @@ export default class SpawnRoom extends Phaser.Scene {
       this.physics.add.collider(this.player.player, this.rightDoor, () => {
         this.scene
           .get('GameScene')
-          .changeRoom('FirstRightRoom', this.scene.key, {
+          .changeRoom('ItemRoom', this.scene.key, {
             x: 530,
             y: window.innerHeight / 2,
           });
